@@ -1,4 +1,6 @@
 .
+├── LICENSE
+├── README.md
 ├── frontend
 │   ├── README.md
 │   ├── package-lock.json
@@ -16,10 +18,11 @@
 │       ├── App.test.js
 │       ├── components
 │       │   ├── Login.js
-│       │   └── Register.js
+│       │   ├── Register.js
+│       │   └── ResetPassword.js
 │       ├── css
-│       │   ├──  main.css
-│       │   └── index.jsx
+│       │   ├── index.jsx
+│       │   └── main.css
 │       ├── index.css
 │       ├── index.js
 │       ├── logo.svg
@@ -34,4 +37,4 @@
 │   └── requirements.txt
 └── tree.txt
 
-8 directories, 27 files
+8 directories, 30 files

@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import axios from "axios";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import ResetPassword from "./components/ResetPassword"; // import the ResetPassword component
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -57,10 +58,15 @@ const App = () => {
               username={username}
               setUsername={setUsername}
               password={password}
+              email={email}
               setEmail={setEmail}
               handleRegister={handleRegister}
             />
           }
+        />
+        <Route
+          path="/reset-password"
+          element={<ResetPassword />} // add a route for the ResetPassword component
         />
       </Routes>
     </BrowserRouter>

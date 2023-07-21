@@ -77,10 +77,22 @@ def login():
 
     # Check if the user exists and the password is correct
     user = User.query.filter_by(username=username).first()
-    if not user or not bcrypt.check_password_hash(user.password, password):
-        return jsonify({"error": "Bad username or password"}), 401
+    if not user:
+        return jsonify({"error": "Username not found"}), 401
+    elif not bcrypt.check_password_hash(user.password, password):
+        return jsonify({"error": "Incorrect password"}), 401
 
     return jsonify({"message": "Logged in"}), 200
+
+
+@app.route("/reset-password", methods=["POST"])
+def reset_password():
+    data = request.get_json()
+    email = data.get("email")
+
+    # Add your logic here to handle password reset
+
+    return jsonify({"message": "Password reset email sent"}), 200
 
 
 if __name__ == "__main__":
