@@ -49,17 +49,29 @@ function Register() {
     validateUsername();
     validatePassword();
 
-    if (emailError || usernameError || passwordError) return; // if there's any error, stop here
+    if (emailError || usernameError || passwordError) return;
 
     try {
       await axios.post("http://localhost:5000/register", {
         username,
         password,
+        email,
         role,
       });
       alert("Registration successful!");
     } catch (err) {
-      alert("Registration failed");
+      if (err.response.data.error === "Username taken") {
+        alert(
+          "Username is already taken. If you are an existing user, please login"
+        );
+      }
+      if (err.response.data.error === "Email taken") {
+        alert(
+          "Email is already registered. If you are an existing user, please login"
+        );
+      } else {
+        alert("Registration failed");
+      }
     }
   };
 

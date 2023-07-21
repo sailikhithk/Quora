@@ -7,6 +7,7 @@ import Register from "./components/Register";
 const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
   const handleLogin = async () => {
     const data = {
@@ -25,6 +26,7 @@ const App = () => {
     const data = {
       username: username,
       password: password,
+      email: email,
     };
 
     await axios.post("/api/register", data, {
@@ -55,6 +57,7 @@ const App = () => {
               username={username}
               setUsername={setUsername}
               password={password}
+              setEmail={setEmail}
               handleRegister={handleRegister}
             />
           }
