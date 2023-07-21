@@ -1,0 +1,37 @@
+.
+├── frontend
+│   ├── README.md
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── logo192.png
+│   │   ├── logo512.png
+│   │   ├── manifest.json
+│   │   └── robots.txt
+│   └── src
+│       ├── App.css
+│       ├── App.js
+│       ├── App.test.js
+│       ├── components
+│       │   ├── Login.js
+│       │   └── Register.js
+│       ├── css
+│       │   ├──  main.css
+│       │   └── index.jsx
+│       ├── index.css
+│       ├── index.js
+│       ├── logo.svg
+│       ├── reportWebVitals.js
+│       └── setupTests.js
+├── server
+│   ├── __pycache__
+│   │   └── app.cpython-311.pyc
+│   ├── app.db
+│   ├── app.py
+│   ├── create_db.py
+│   └── requirements.txt
+└── tree.txt
+
+8 directories, 27 files
