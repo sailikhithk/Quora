@@ -1,76 +1,104 @@
 .
-├── __pycache__
-│   ├── app.cpython-311.pyc
-│   └── db.cpython-311.pyc
-├── app.db
-├── app.py
-├── controllers
-│   ├── __init__.py
-│   ├── __pycache__
-│   │   ├── __init__.cpython-311.pyc
-│   │   ├── answer_controller.cpython-311.pyc
-│   │   ├── question_controller.cpython-311.pyc
-│   │   ├── quiz_controller.cpython-311.pyc
-│   │   ├── result_controller.cpython-311.pyc
-│   │   └── user_controller.cpython-311.pyc
-│   ├── answer_controller.py
-│   ├── question_controller.py
-│   ├── quiz_controller.py
-│   ├── result_controller.py
-│   └── user_controller.py
-├── create_db.py
-├── db.py
-├── models
-│   ├── __init__.py
-│   ├── __pycache__
-│   │   ├── __init__.cpython-311.pyc
-│   │   ├── answer_model.cpython-311.pyc
-│   │   ├── question_model.cpython-311.pyc
-│   │   ├── quiz_model.cpython-311.pyc
-│   │   ├── result_model.cpython-311.pyc
-│   │   ├── role_model.cpython-311.pyc
-│   │   └── user_model.cpython-311.pyc
-│   ├── answer_model.py
-│   ├── question_model.py
-│   ├── quiz_model.py
-│   ├── result_model.py
-│   ├── role_model.py
-│   └── user_model.py
-├── repositories
-│   ├── __init__.py
-│   ├── __pycache__
-│   │   ├── __init__.cpython-311.pyc
-│   │   ├── answer_repository.cpython-311.pyc
-│   │   ├── question_repository.cpython-311.pyc
-│   │   ├── quiz_repository.cpython-311.pyc
-│   │   ├── result_repository.cpython-311.pyc
-│   │   └── user_repository.cpython-311.pyc
-│   ├── answer_repository.py
-│   ├── question_repository.py
-│   ├── quiz_repository.py
-│   ├── result_repository.py
-│   └── user_repository.py
-├── requirements.txt
-├── routes
-│   ├── __init__.py
-│   ├── __pycache__
-│   │   ├── __init__.cpython-311.pyc
-│   │   └── routes.cpython-311.pyc
-│   └── routes.py
-├── services
-│   ├── __init__.py
-│   ├── __pycache__
-│   │   ├── __init__.cpython-311.pyc
-│   │   ├── answer_service.cpython-311.pyc
-│   │   ├── question_service.cpython-311.pyc
-│   │   ├── quiz_service.cpython-311.pyc
-│   │   ├── result_service.cpython-311.pyc
-│   │   └── user_service.cpython-311.pyc
-│   ├── answer_service.py
-│   ├── question_service.py
-│   ├── quiz_service.py
-│   ├── result_service.py
-│   └── user_service.py
+├── 1.png
+├── LICENSE
+├── README.md
+├── build
+│   └── bdist.macosx-13-x86_64
+├── dist
+│   ├── quora-0.1.0-py3-none-any.whl
+│   └── quora-0.1.0.tar.gz
+├── frontend
+│   ├── README.md
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── logo192.png
+│   │   ├── logo512.png
+│   │   ├── manifest.json
+│   │   └── robots.txt
+│   └── src
+│       ├── App.css
+│       ├── App.js
+│       ├── App.test.js
+│       ├── Result.js
+│       ├── components
+│       │   ├── Answers
+│       │   │   └── Answer.js
+│       │   ├── Dashboard.js
+│       │   ├── Homepage.js
+│       │   ├── Navbar.css
+│       │   ├── Navbar.js
+│       │   ├── Question
+│       │   │   └── Question.js
+│       │   ├── Quiz
+│       │   │   └── Quiz.js
+│       │   ├── Quiz.js
+│       │   ├── QuizList
+│       │   │   └── QuizList.js
+│       │   ├── Result
+│       │   │   └── Result.js
+│       │   ├── Result.js
+│       │   └── auth
+│       │       ├── Login.js
+│       │       ├── Register.js
+│       │       └── ResetPassword.js
+│       ├── css
+│       │   ├── index.jsx
+│       │   └── main.css
+│       ├── index.css
+│       ├── index.js
+│       ├── logo.svg
+│       ├── reportWebVitals.js
+│       ├── services
+│       │   └── apiService.js
+│       └── setupTests.js
+├── quora.egg-info
+│   ├── PKG-INFO
+│   ├── SOURCES.txt
+│   ├── dependency_links.txt
+│   ├── requires.txt
+│   └── top_level.txt
+├── server
+│   ├── app.db
+│   ├── app.py
+│   ├── controllers
+│   │   ├── __init__.py
+│   │   ├── answer_controller.py
+│   │   ├── question_controller.py
+│   │   ├── quiz_controller.py
+│   │   ├── result_controller.py
+│   │   └── user_controller.py
+│   ├── create_db.py
+│   ├── db.py
+│   ├── models
+│   │   ├── __init__.py
+│   │   ├── answer_model.py
+│   │   ├── question_model.py
+│   │   ├── quiz_model.py
+│   │   ├── result_model.py
+│   │   ├── role_model.py
+│   │   └── user_model.py
+│   ├── repositories
+│   │   ├── __init__.py
+│   │   ├── answer_repository.py
+│   │   ├── question_repository.py
+│   │   ├── quiz_repository.py
+│   │   ├── result_repository.py
+│   │   └── user_repository.py
+│   ├── requirements.txt
+│   ├── routes
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   └── services
+│       ├── __init__.py
+│       ├── answer_service.py
+│       ├── question_service.py
+│       ├── quiz_service.py
+│       ├── result_service.py
+│       └── user_service.py
+├── setup.py
 └── tree.txt
 
-12 directories, 62 files
+23 directories, 79 files

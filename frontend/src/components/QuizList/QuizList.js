@@ -1,9 +1,7 @@
-// Dashboard.js
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import apiService from "../services/apiService";
 
-const Dashboard = () => {
+const QuizList = () => {
   const [quizzes, setQuizzes] = useState([]);
 
   useEffect(() => {
@@ -21,14 +19,15 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h2>Dashboard</h2>
+      <h2>Quizzes</h2>
       {quizzes.map((quiz) => (
         <div key={quiz.id}>
-          <Link to={`/quiz/${quiz.id}`}>{quiz.title}</Link>
+          <h3>{quiz.title}</h3>
+          {/* Here you can add a button/link to start the quiz */}
         </div>
       ))}
     </div>
   );
 };
 
-export default Dashboard;
+export default QuizList;

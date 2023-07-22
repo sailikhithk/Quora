@@ -71,7 +71,7 @@ const App = () => {
           />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/dashboard" element={<Dashboard />}></Route>
-          <Route path="/quiz" element={<Quiz />}></Route>
+          <Route path="/quiz/:id" element={<Quiz />}></Route>
           <Route path="/result" element={<Result />}></Route>
         </Routes>
       </div>
