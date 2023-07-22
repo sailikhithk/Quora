@@ -1,9 +1,54 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import "../../css/main.css";
+import styled from "styled-components";
 
-function Login() {
+const Form = styled.form`
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+`;
+
+const InputText = styled.input.attrs((props) => ({
+  type: "text",
+}))`
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #007aff;
+  border-radius: 5px;
+`;
+
+const InputPassword = styled.input.attrs((props) => ({
+  type: "password",
+}))`
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #007aff;
+  border-radius: 5px;
+`;
+
+const InputSubmit = styled.input.attrs((props) => ({
+  type: "submit",
+}))`
+  background-color: red;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: darkred;
+  }
+`;
+
+function Login({ handleLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -18,6 +63,7 @@ function Login() {
       });
       localStorage.setItem("token", res.data.token);
       alert("Login successful!");
+      handleLogin();
       navigate("/dashboard");
     } catch (err) {
       alert("Login failed");
@@ -25,27 +71,23 @@ function Login() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="auth-form">
-      <input
-        type="text"
+    <Form onSubmit={handleSubmit}>
+      <InputText
         placeholder="Username"
         onChange={(e) => setUsername(e.target.value)}
-        style={{ width: "100%", boxSizing: "border-box" }}
       />
-      <input
-        type="password"
+      <InputPassword
         placeholder="Password"
         onChange={(e) => setPassword(e.target.value)}
-        style={{ width: "100%", boxSizing: "border-box" }}
       />
-      <input type="submit" value="Login" className="auth-button" />
+      <InputSubmit value="Login" />
       <p>
         New user? <Link to="/register">Register</Link>
       </p>
       <p>
         <Link to="/reset-password">Forgot Password?</Link>
       </p>
-    </form>
+    </Form>
   );
 }
 

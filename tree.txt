@@ -23,6 +23,10 @@
 │       ├── App.js
 │       ├── App.test.js
 │       ├── Result.js
+│       ├── assets
+│       │   ├── logo.png
+│       │   ├── quiz-time.webp
+│       │   └── quiz.png
 │       ├── components
 │       │   ├── Answer.js
 │       │   ├── Dashboard.js
@@ -74,6 +78,8 @@
 │   │   ├── result_model.py
 │   │   ├── role_model.py
 │   │   └── user_model.py
+│   ├── package-lock.json
+│   ├── package.json
 │   ├── repositories
 │   │   ├── __init__.py
 │   │   ├── answer_repository.py
@@ -95,4 +101,4 @@
 ├── setup.py
 └── tree.txt
 
-18 directories, 78 files
+19 directories, 83 files

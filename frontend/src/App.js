@@ -1,5 +1,8 @@
+// frontend/src/components/App.js
+
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { createGlobalStyle } from "styled-components";
 import axios from "axios";
 import Navbar from "./components/Navbar";
 import Login from "./components/auth/Login";
@@ -8,18 +11,38 @@ import ResetPassword from "./components/auth/ResetPassword";
 import Homepage from "./components/Homepage";
 import Dashboard from "./components/Dashboard";
 import Quiz from "./components/Quiz";
-import QuizList from "./components/QuizList"; // <- import your new component
+import QuizList from "./components/QuizList";
 import Result from "./components/Result";
 
-// Set up axios
 const api = axios.create({
   baseURL: "http://localhost:5000",
 });
+
+const GlobalStyle = createGlobalStyle`
+  body, html, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  body {
+    background-color: #000; 
+    color: #fff; 
+    font-family: 'Poppins', sans-serif;
+  }
+
+  a {
+    color: #fff; 
+  }
+`;
 
 const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [authenticated, setAuthenticated] = useState(false);
 
   const handleLogin = async () => {
     const data = {
@@ -28,6 +51,7 @@ const App = () => {
     };
 
     await api.post("/api/login", data);
+    setAuthenticated(true);
   };
 
   const handleRegister = async () => {
@@ -38,46 +62,113 @@ const App = () => {
     };
 
     await api.post("/api/register", data);
+    setAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    setAuthenticated(false);
   };
 
   return (
     <Router>
-      <Navbar />
-      <div className="content">
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route
-            path="/login"
-            element={
+      <GlobalStyle />
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route
+          path="/login"
+          element={
+            <>
+              <Navbar
+                authenticated={authenticated}
+                handleLogout={handleLogout}
+              />
               <Login
                 username={username}
                 setUsername={setUsername}
                 password={password}
+                setPassword={setPassword}
                 handleLogin={handleLogin}
               />
-            }
-          />
-          <Route
-            path="/register"
-            element={
+            </>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <>
               <Register
                 username={username}
                 setUsername={setUsername}
                 password={password}
+                setPassword={setPassword}
                 email={email}
                 setEmail={setEmail}
                 handleRegister={handleRegister}
               />
-            }
-          />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/quiz/:id" element={<Quiz />} />
-          <Route path="/quiz" element={<QuizList />} />{" "}
-          {/* <- your new route */}
-          <Route path="/result" element={<Result />} />
-        </Routes>
-      </div>
+            </>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <>
+              <Navbar
+                authenticated={authenticated}
+                handleLogout={handleLogout}
+              />
+              <ResetPassword />
+            </>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <>
+              <Navbar
+                authenticated={authenticated}
+                handleLogout={handleLogout}
+              />
+              <Dashboard />
+            </>
+          }
+        />
+        <Route
+          path="/quiz"
+          element={
+            <>
+              <Navbar
+                authenticated={authenticated}
+                handleLogout={handleLogout}
+              />
+              <QuizList />
+            </>
+          }
+        />
+        <Route
+          path="/quiz/:id"
+          element={
+            <>
+              <Navbar
+                authenticated={authenticated}
+                handleLogout={handleLogout}
+              />
+              <Quiz />
+            </>
+          }
+        />
+        <Route
+          path="/result"
+          element={
+            <>
+              <Navbar
+                authenticated={authenticated}
+                handleLogout={handleLogout}
+              />
+              <Result />
+            </>
+          }
+        />
+      </Routes>
     </Router>
   );
 };
