@@ -16,3 +16,6 @@ class Quiz(db.Model):
 
     def __repr__(self):
         return "<Quiz %r>" % self.title
+
+    def serialize(self):
+        return {"id": self.id, "title": self.title, "author_id": self.author_id}

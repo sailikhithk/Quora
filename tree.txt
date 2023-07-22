@@ -76,6 +76,7 @@
 │   │   ├── __init__.py
 │   │   ├── answer_model.py
 │   │   ├── question_model.py
+│   │   ├── quiz_attempt_model.py
 │   │   ├── quiz_model.py
 │   │   ├── result_model.py
 │   │   ├── role_model.py
@@ -101,4 +102,4 @@
 ├── setup.py
 └── tree.txt
 
-23 directories, 79 files
+23 directories, 80 files

@@ -4,6 +4,8 @@ from services.quiz_service import QuizService
 from services.question_service import QuestionService, QuestionRepository
 from repositories.quiz_repository import QuizRepository
 from flask_cors import CORS
+from models import Quiz
+
 from db import db  # <- Add this line
 
 
@@ -12,7 +14,13 @@ class QuizController:
         self.quiz_service = QuizService(QuizRepository(db))
         self.question_service = QuestionService()  # Updated this QuestionService
         self.quiz = Blueprint("quiz", __name__)
-        CORS(self.quiz)
+
+        @self.quiz.route("/", methods=["GET"])
+        def get_all_quizzes():
+            app.logger.info("Getting all quizzes")  # Logging here
+            quizzes = self.quiz_service.get_all_quizzes()
+            app.logger.info("Received quizzes from service")  # Logging here
+            return jsonify([quiz.serialize() for quiz in quizzes]), 200
 
         @self.quiz.route("/", methods=["POST"])
         def create_quiz():

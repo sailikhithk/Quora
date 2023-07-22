@@ -1,4 +1,4 @@
-from models.quiz_model import Quiz
+from models import Quiz
 
 
 class QuizRepository:

@@ -1,4 +1,7 @@
 from repositories.quiz_repository import QuizRepository
+from sqlalchemy.exc import SQLAlchemyError
+from flask import current_app as app
+from models import Quiz
 
 
 class QuizService:
@@ -6,7 +9,13 @@ class QuizService:
         self.quiz_repository = quiz_repository
 
     def get_all_quizzes(self):
-        return self.quiz_repository.get_all_quizzes()
+        try:
+            app.logger.info("QuizService: Fetching all quizzes")  # Logging here
+            return self.quiz_repository.get_all_quizzes()
+        except SQLAlchemyError as e:
+            app.logger.error("QuizService: Error fetching quizzes")  # Logging here
+            app.logger.error(str(e))
+            return None
 
     def get_quiz_by_id(self, quiz_id):
         return self.quiz_repository.get_quiz_by_id(quiz_id)
