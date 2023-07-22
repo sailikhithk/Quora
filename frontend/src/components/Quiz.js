@@ -1,14 +1,55 @@
-// frontend/src/components/Quiz.js
+import React, { useEffect, useState, useCallback } from "react"; // Added useCallback
+import apiService from "../services/apiService";
 
-import React from "react";
+const Quiz = ({ match }) => {
+  const [quiz, setQuiz] = useState(null);
+  const [questions, setQuestions] = useState([]);
 
-function Quiz() {
+  // Added useCallback
+  const fetchQuiz = useCallback(async () => {
+    try {
+      const response = await apiService.get(`/quiz/${match.params.id}`);
+      // For now, we're assuming that the "response.data.questions" array has the same format as our hardcoded data.
+      const apiQuestions = response.data.questions.map((question) => ({
+        ...question,
+        answers: ["Option 1", "Option 2", "Option 3", "Option 4"], // Hardcoded options
+      }));
+      setQuiz(response.data);
+      setQuestions(apiQuestions);
+      console.log(response.data); // This will log the response data to the console
+      console.log(apiQuestions); // This will log the transformed questions to the console
+    } catch (error) {
+      console.error(error);
+    }
+  }, [match.params.id]); // Dependency array for useCallback
+
+  useEffect(() => {
+    fetchQuiz();
+  }, [fetchQuiz]); // Updated dependency array
+
   return (
     <div>
-      <h1>Quiz</h1>
-      <p>This is where the quiz questions will be displayed.</p>
+      <h2>{quiz ? quiz.title : "Loading..."}</h2>
+      {questions.map((question) => (
+        <div key={question.id}>
+          <p>{question.content}</p>
+          {question.answers.map((answer, index) => (
+            <div key={index}>
+              <input
+                type="radio"
+                id={`question-${question.id}-option-${index}`}
+                name={`question-${question.id}`}
+                value={answer}
+              />
+              <label htmlFor={`question-${question.id}-option-${index}`}>
+                {answer}
+              </label>
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   );
-}
+};
 
 export default Quiz;

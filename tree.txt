@@ -24,21 +24,14 @@
 │       ├── App.test.js
 │       ├── Result.js
 │       ├── components
-│       │   ├── Answers
-│       │   │   └── Answer.js
+│       │   ├── Answer.js
 │       │   ├── Dashboard.js
 │       │   ├── Homepage.js
 │       │   ├── Navbar.css
 │       │   ├── Navbar.js
-│       │   ├── Question
-│       │   │   └── Question.js
-│       │   ├── Quiz
-│       │   │   └── Quiz.js
+│       │   ├── Question.js
 │       │   ├── Quiz.js
-│       │   ├── QuizList
-│       │   │   └── QuizList.js
-│       │   ├── Result
-│       │   │   └── Result.js
+│       │   ├── QuizList.js
 │       │   ├── Result.js
 │       │   └── auth
 │       │       ├── Login.js
@@ -102,4 +95,4 @@
 ├── setup.py
 └── tree.txt
 
-23 directories, 80 files
+18 directories, 78 files

@@ -8,6 +8,7 @@ import ResetPassword from "./components/auth/ResetPassword";
 import Homepage from "./components/Homepage";
 import Dashboard from "./components/Dashboard";
 import Quiz from "./components/Quiz";
+import QuizList from "./components/QuizList"; // <- import your new component
 import Result from "./components/Result";
 
 // Set up axios
@@ -70,9 +71,11 @@ const App = () => {
             }
           />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/dashboard" element={<Dashboard />}></Route>
-          <Route path="/quiz/:id" element={<Quiz />}></Route>
-          <Route path="/result" element={<Result />}></Route>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/quiz/:id" element={<Quiz />} />
+          <Route path="/quiz" element={<QuizList />} />{" "}
+          {/* <- your new route */}
+          <Route path="/result" element={<Result />} />
         </Routes>
       </div>
     </Router>
