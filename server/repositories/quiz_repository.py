@@ -11,8 +11,8 @@ class QuizRepository:
     def get_quiz_by_id(self, quiz_id):
         return self.db.session.query(Quiz).filter_by(id=quiz_id).first()
 
-    def create_quiz(self, title):
-        new_quiz = Quiz(title=title)
+    def create_quiz(self, title, user_id):
+        new_quiz = Quiz(title=title, author_id=user_id)
         self.db.session.add(new_quiz)
         self.db.session.commit()
         return new_quiz

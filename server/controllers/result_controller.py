@@ -3,11 +3,12 @@ from flask import Blueprint, request, jsonify
 from services.result_service import ResultService
 from repositories.result_repository import ResultRepository
 from flask_cors import CORS
+from db import db  # <- Add this line
 
 
 class ResultController:
-    def __init__(self, app, result_service):
-        self.result_service = result_service
+    def __init__(self, app):
+        self.result_service = ResultService(ResultRepository(db))
         self.result = Blueprint("result", __name__)
         CORS(self.result)
 

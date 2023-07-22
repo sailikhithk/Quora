@@ -2,9 +2,12 @@
 ├── __pycache__
 │   ├── app.cpython-311.pyc
 │   └── db.cpython-311.pyc
+├── app.db
 ├── app.py
 ├── controllers
+│   ├── __init__.py
 │   ├── __pycache__
+│   │   ├── __init__.cpython-311.pyc
 │   │   ├── answer_controller.cpython-311.pyc
 │   │   ├── question_controller.cpython-311.pyc
 │   │   ├── quiz_controller.cpython-311.pyc
@@ -18,7 +21,9 @@
 ├── create_db.py
 ├── db.py
 ├── models
+│   ├── __init__.py
 │   ├── __pycache__
+│   │   ├── __init__.cpython-311.pyc
 │   │   ├── answer_model.cpython-311.pyc
 │   │   ├── question_model.cpython-311.pyc
 │   │   ├── quiz_model.cpython-311.pyc
@@ -32,7 +37,9 @@
 │   ├── role_model.py
 │   └── user_model.py
 ├── repositories
+│   ├── __init__.py
 │   ├── __pycache__
+│   │   ├── __init__.cpython-311.pyc
 │   │   ├── answer_repository.cpython-311.pyc
 │   │   ├── question_repository.cpython-311.pyc
 │   │   ├── quiz_repository.cpython-311.pyc
@@ -45,12 +52,15 @@
 │   └── user_repository.py
 ├── requirements.txt
 ├── routes
+│   ├── __init__.py
 │   ├── __pycache__
+│   │   ├── __init__.cpython-311.pyc
 │   │   └── routes.cpython-311.pyc
-│   ├── app.db
 │   └── routes.py
 ├── services
+│   ├── __init__.py
 │   ├── __pycache__
+│   │   ├── __init__.cpython-311.pyc
 │   │   ├── answer_service.cpython-311.pyc
 │   │   ├── question_service.cpython-311.pyc
 │   │   ├── quiz_service.cpython-311.pyc
@@ -63,4 +73,4 @@
 │   └── user_service.py
 └── tree.txt
 
-12 directories, 52 files
+12 directories, 62 files

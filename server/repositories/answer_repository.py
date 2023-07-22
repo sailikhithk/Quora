@@ -18,6 +18,7 @@ class AnswerRepository:
             question_id=question_id,
             user_id=user_id,
         )
+
         self.db.session.add(new_answer)
         self.db.session.commit()
         return new_answer
