@@ -1,9 +1,19 @@
 import React, { useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "axios";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import ResetPassword from "./components/ResetPassword"; // import the ResetPassword component
+import Navbar from "./components/Navbar";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+import ResetPassword from "./components/auth/ResetPassword";
+import Homepage from "./components/Homepage";
+import Dashboard from "./components/Dashboard";
+import Quiz from "./components/Quiz";
+import Result from "./components/Result";
+
+// Set up axios
+const api = axios.create({
+  baseURL: "http://localhost:5000",
+});
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -16,11 +26,7 @@ const App = () => {
       password: password,
     };
 
-    await axios.post("/api/login", data, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
+    await api.post("/api/login", data);
   };
 
   const handleRegister = async () => {
@@ -30,46 +36,46 @@ const App = () => {
       email: email,
     };
 
-    await axios.post("/api/register", data, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
+    await api.post("/api/register", data);
   };
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            <Login
-              username={username}
-              setUsername={setUsername}
-              password={password}
-              handleLogin={handleLogin}
-            />
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <Register
-              username={username}
-              setUsername={setUsername}
-              password={password}
-              email={email}
-              setEmail={setEmail}
-              handleRegister={handleRegister}
-            />
-          }
-        />
-        <Route
-          path="/reset-password"
-          element={<ResetPassword />} // add a route for the ResetPassword component
-        />
-      </Routes>
-    </BrowserRouter>
+    <Router>
+      <Navbar />
+      <div className="content">
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route
+            path="/login"
+            element={
+              <Login
+                username={username}
+                setUsername={setUsername}
+                password={password}
+                handleLogin={handleLogin}
+              />
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <Register
+                username={username}
+                setUsername={setUsername}
+                password={password}
+                email={email}
+                setEmail={setEmail}
+                handleRegister={handleRegister}
+              />
+            }
+          />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/dashboard" element={<Dashboard />}></Route>
+          <Route path="/quiz" element={<Quiz />}></Route>
+          <Route path="/result" element={<Result />}></Route>
+        </Routes>
+      </div>
+    </Router>
   );
 };
 

@@ -1,1 +1,42 @@
-version = "0.1.0"
+from setuptools import setup, find_packages
+
+setup(
+    name="quora",
+    version="0.1.0",
+    description="Quizzer app",
+    author="Sai Likhith K",
+    author_email="sailikhithcse@gmail.com",
+    url="https://github.com/sailikhithk/Quora.git",
+    packages=find_packages(),
+    install_requires=[
+        # List your project's dependencies here
+        "requests",
+        "numpy",
+        "pandas",
+        "flask",
+        "flask_restful",
+        "flask_cors",
+        "boto3",
+        "flask_cors",
+        "flask_sqlalchemy",
+        "flask_migrate",
+        "flask_jwt_extended",
+        "flask_bcrypt",
+        "flask_mail",
+        "flask_script",
+        "flask_marshmallow",
+        "twine",
+    ],
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: Apache Software License",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+    ],
+)

@@ -1,41 +1,66 @@
 .
-├── LICENSE
-├── README.md
-├── frontend
-│   ├── README.md
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── public
-│   │   ├── favicon.ico
-│   │   ├── index.html
-│   │   ├── logo192.png
-│   │   ├── logo512.png
-│   │   ├── manifest.json
-│   │   └── robots.txt
-│   └── src
-│       ├── App.css
-│       ├── App.js
-│       ├── App.test.js
-│       ├── components
-│       │   ├── Login.js
-│       │   ├── Register.js
-│       │   └── ResetPassword.js
-│       ├── css
-│       │   ├── index.jsx
-│       │   └── main.css
-│       ├── index.css
-│       ├── index.js
-│       ├── logo.svg
-│       ├── reportWebVitals.js
-│       └── setupTests.js
-├── server
+├── __pycache__
+│   ├── app.cpython-311.pyc
+│   └── db.cpython-311.pyc
+├── app.py
+├── controllers
 │   ├── __pycache__
-│   │   └── app.cpython-311.pyc
+│   │   ├── answer_controller.cpython-311.pyc
+│   │   ├── question_controller.cpython-311.pyc
+│   │   ├── quiz_controller.cpython-311.pyc
+│   │   ├── result_controller.cpython-311.pyc
+│   │   └── user_controller.cpython-311.pyc
+│   ├── answer_controller.py
+│   ├── question_controller.py
+│   ├── quiz_controller.py
+│   ├── result_controller.py
+│   └── user_controller.py
+├── create_db.py
+├── db.py
+├── models
+│   ├── __pycache__
+│   │   ├── answer_model.cpython-311.pyc
+│   │   ├── question_model.cpython-311.pyc
+│   │   ├── quiz_model.cpython-311.pyc
+│   │   ├── result_model.cpython-311.pyc
+│   │   ├── role_model.cpython-311.pyc
+│   │   └── user_model.cpython-311.pyc
+│   ├── answer_model.py
+│   ├── question_model.py
+│   ├── quiz_model.py
+│   ├── result_model.py
+│   ├── role_model.py
+│   └── user_model.py
+├── repositories
+│   ├── __pycache__
+│   │   ├── answer_repository.cpython-311.pyc
+│   │   ├── question_repository.cpython-311.pyc
+│   │   ├── quiz_repository.cpython-311.pyc
+│   │   ├── result_repository.cpython-311.pyc
+│   │   └── user_repository.cpython-311.pyc
+│   ├── answer_repository.py
+│   ├── question_repository.py
+│   ├── quiz_repository.py
+│   ├── result_repository.py
+│   └── user_repository.py
+├── requirements.txt
+├── routes
+│   ├── __pycache__
+│   │   └── routes.cpython-311.pyc
 │   ├── app.db
-│   ├── app.py
-│   ├── create_db.py
-│   └── requirements.txt
-├── setup.py
+│   └── routes.py
+├── services
+│   ├── __pycache__
+│   │   ├── answer_service.cpython-311.pyc
+│   │   ├── question_service.cpython-311.pyc
+│   │   ├── quiz_service.cpython-311.pyc
+│   │   ├── result_service.cpython-311.pyc
+│   │   └── user_service.cpython-311.pyc
+│   ├── answer_service.py
+│   ├── question_service.py
+│   ├── quiz_service.py
+│   ├── result_service.py
+│   └── user_service.py
 └── tree.txt
 
-8 directories, 31 files
+12 directories, 52 files
