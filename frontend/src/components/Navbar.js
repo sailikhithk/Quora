@@ -1,57 +1,73 @@
-// frontend/src/components/Navbar.js
-
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import {
+  BiHomeAlt,
+  BiBookOpen,
+  BiUserCircle,
+  BiCog,
+  BiDotsVerticalRounded,
+} from "react-icons/bi";
 
 const StyledNavbar = styled.nav`
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   background-color: #000;
-  padding: 1rem;
   color: white;
+  padding: 1rem;
+  width: 80px;
+  height: 100vh;
+  position: fixed;
 `;
 
 const StyledLink = styled(Link)`
   color: white;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  background-color: red;
-  border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease;
 
   &:hover {
-    background-color: darkred;
+    color: darkred;
   }
 `;
 
 function Navbar({ authenticated, handleLogout }) {
-  const location = useLocation();
-  const isLoginOrRegisterPage = [
-    "/login",
-    "/register",
-    "/reset-password",
-  ].includes(location.pathname);
-
   return (
     <StyledNavbar>
-      {!isLoginOrRegisterPage && <StyledLink to="/">Home</StyledLink>}
+      <StyledLink to="/">
+        <BiHomeAlt size={30} />
+        Home
+      </StyledLink>
       {authenticated ? (
         <>
-          <StyledLink to="/dashboard">Dashboard</StyledLink>
-          <StyledLink to="/quiz">Quiz</StyledLink>
-          <StyledLink to="/result">Result</StyledLink>
+          <StyledLink to="/dashboard">
+            <BiDotsVerticalRounded size={30} />
+            Dashboard
+          </StyledLink>
+          <StyledLink to="/quiz">
+            <BiBookOpen size={30} />
+            Quiz
+          </StyledLink>
+          <StyledLink to="/profile">
+            <BiUserCircle size={30} />
+            Profile
+          </StyledLink>
+          <StyledLink to="/settings">
+            <BiCog size={30} />
+            Settings
+          </StyledLink>
           <StyledLink to="/logout" onClick={handleLogout}>
             Logout
           </StyledLink>
         </>
       ) : (
         <>
-          {!isLoginOrRegisterPage && <StyledLink to="/login">Login</StyledLink>}
-          {!isLoginOrRegisterPage && (
-            <StyledLink to="/register">Register</StyledLink>
-          )}
+          <StyledLink to="/login">Login</StyledLink>
+          <StyledLink to="/register">Register</StyledLink>
         </>
       )}
     </StyledNavbar>

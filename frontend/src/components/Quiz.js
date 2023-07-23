@@ -6,6 +6,7 @@ import styled from "styled-components";
 const QuizContainer = styled.form`
   color: #fff;
   background-color: transparent;
+  padding-left: 11%; #quiz padding
 `;
 
 const QuestionContainer = styled.div`

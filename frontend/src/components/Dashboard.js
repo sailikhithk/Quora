@@ -3,13 +3,28 @@ import { Link } from "react-router-dom";
 import apiService from "../services/apiService";
 import styled from "styled-components";
 
-// Define styled-components
+const LogoutButton = styled.button`
+  color: white;
+  background-color: red;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: darkred;
+  }
+`;
+
 const QuizCard = styled.div`
   border: 1px solid #ddd;
   border-radius: 4px;
-  padding: 10px;
-  margin: 10px;
-  width: 300px;
+  padding: 5%;
+  margin: 10%;
+  width: 20%;
   transition: 0.3s;
   &:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
@@ -22,7 +37,7 @@ const QuizImage = styled.img`
 `;
 
 const QuizTitle = styled.h2`
-  font-size: 18px;
+  font-size: 48px;
 `;
 
 const QuizCategory = styled.p`
@@ -31,11 +46,10 @@ const QuizCategory = styled.p`
 `;
 
 const Progress = styled.div`
-  background-color: #ddd;
+  background-color: #fff;
   height: 20px;
   position: relative;
   border-radius: 5px;
-
   &::after {
     content: "";
     position: absolute;
@@ -70,6 +84,14 @@ const Dashboard = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+  };
+  const DashboardTitle = styled.h2`
+    padding-left: 10%; // Adjust the value to your needs
+  `;
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -80,7 +102,8 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h2>Dashboard</h2>
+      <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+      <DashboardTitle>Dashboard</DashboardTitle>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {quizzes.map((quiz) => (
           <QuizCard key={quiz.id}>
