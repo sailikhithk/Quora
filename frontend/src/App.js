@@ -54,14 +54,22 @@ const App = () => {
     setAuthenticated(true);
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (
+    username,
+    password,
+    email,
+    role,
+    institution
+  ) => {
     const data = {
       username: username,
       password: password,
       email: email,
+      role: role,
+      institution: institution,
     };
 
-    await api.post("/api/register", data);
+    await api.post("/api/user/register", data);
     setAuthenticated(true);
   };
 

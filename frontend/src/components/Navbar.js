@@ -29,22 +29,12 @@ const StyledLink = styled(Link)`
 function Navbar({ authenticated, handleLogout }) {
   return (
     <StyledNavbar>
-      <StyledLink to="/">Home</StyledLink>
+      <StyledLink to="/">Go To Home</StyledLink>
       {authenticated ? (
-        <>
-          <StyledLink to="/dashboard">Dashboard</StyledLink>
-          <StyledLink to="/quiz">Quiz</StyledLink>
-          <StyledLink to="/result">Result</StyledLink>
-          <StyledLink to="/logout" onClick={handleLogout}>
-            Logout
-          </StyledLink>
-        </>
-      ) : (
-        <>
-          <StyledLink to="/login">Login</StyledLink>
-          <StyledLink to="/register">Register</StyledLink>
-        </>
-      )}
+        <StyledLink to="/logout" onClick={handleLogout}>
+          Logout
+        </StyledLink>
+      ) : null}
     </StyledNavbar>
   );
 }

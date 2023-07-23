@@ -38,3 +38,19 @@ class QuizController:
 
             question = self.question_service.create_question(content, quiz_id)
             return jsonify(question)
+
+        @self.quiz.route("/<int:quiz_id>", methods=["GET"])
+        def get_quiz_by_id(quiz_id):
+            quiz = self.quiz_service.get_quiz_by_id(quiz_id)
+            if quiz is None:
+                return jsonify({"error": "Quiz not found"}), 404
+            return jsonify(quiz.serialize()), 200
+
+        @self.quiz.route("/<int:quiz_id>/submit", methods=["POST"])
+        def submit_quiz(quiz_id):
+            data = request.get_json()
+            user_id = ...  # Retrieve the user_id from the current session/user
+            answers = data  # The answers are the POSTed JSON data
+            # Save the user's answers and calculate the score...
+            self.quiz_service.save_answers_and_score(quiz_id, user_id, answers)
+            return jsonify({"message": "Quiz submitted successfully"}), 200

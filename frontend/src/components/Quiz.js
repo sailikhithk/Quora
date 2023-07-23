@@ -1,54 +1,108 @@
-import React, { useEffect, useState, useCallback } from "react"; // Added useCallback
+import React, { useEffect, useState, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import apiService from "../services/apiService";
+import styled from "styled-components";
 
-const Quiz = ({ match }) => {
+const QuizContainer = styled.form`
+  color: #fff;
+  background-color: transparent;
+`;
+
+const QuestionContainer = styled.div`
+  background-color: #444;
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const OptionInput = styled.input`
+  margin-right: 0.5rem;
+`;
+
+const OptionLabel = styled.label`
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: #555;
+  }
+`;
+
+const SubmitButton = styled.button`
+  color: #fff;
+  background-color: red;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: darkred;
+  }
+`;
+
+const Quiz = () => {
   const [quiz, setQuiz] = useState(null);
   const [questions, setQuestions] = useState([]);
+  const { id } = useParams();
 
-  // Added useCallback
+  const [answers, setAnswers] = useState({});
+
   const fetchQuiz = useCallback(async () => {
     try {
-      const response = await apiService.get(`/quiz/${match.params.id}`);
-      // For now, we're assuming that the "response.data.questions" array has the same format as our hardcoded data.
+      const response = await apiService.get(`/quiz/${id}`);
       const apiQuestions = response.data.questions.map((question) => ({
         ...question,
-        answers: ["Option 1", "Option 2", "Option 3", "Option 4"], // Hardcoded options
+        answers: ["Option 1", "Option 2", "Option 3", "Option 4"],
       }));
       setQuiz(response.data);
       setQuestions(apiQuestions);
-      console.log(response.data); // This will log the response data to the console
-      console.log(apiQuestions); // This will log the transformed questions to the console
     } catch (error) {
       console.error(error);
     }
-  }, [match.params.id]); // Dependency array for useCallback
+  }, [id]);
 
   useEffect(() => {
     fetchQuiz();
-  }, [fetchQuiz]); // Updated dependency array
+  }, [fetchQuiz]);
+
+  const handleChange = (e, questionId) => {
+    setAnswers({ ...answers, [questionId]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await apiService.post(`/quiz/${id}/submit`, answers);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <div>
-      <h2>{quiz ? quiz.title : "Loading..."}</h2>
+    <QuizContainer onSubmit={handleSubmit}>
+      <h2 style={{ color: "white" }}>{quiz ? quiz.title : "Loading..."}</h2>{" "}
+      {/* Color of quiz title changed to white */}
       {questions.map((question) => (
-        <div key={question.id}>
+        <QuestionContainer key={question.id}>
           <p>{question.content}</p>
           {question.answers.map((answer, index) => (
-            <div key={index}>
-              <input
+            <OptionLabel key={index}>
+              <OptionInput
                 type="radio"
                 id={`question-${question.id}-option-${index}`}
                 name={`question-${question.id}`}
                 value={answer}
+                onChange={(e) => handleChange(e, question.id)}
               />
-              <label htmlFor={`question-${question.id}-option-${index}`}>
-                {answer}
-              </label>
-            </div>
+              {answer}
+            </OptionLabel>
           ))}
-        </div>
+        </QuestionContainer>
       ))}
-    </div>
+      <SubmitButton type="submit">Submit Quiz</SubmitButton>
+    </QuizContainer>
   );
 };
 
