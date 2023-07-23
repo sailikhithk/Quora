@@ -3,7 +3,7 @@ from flask_jwt_extended import (create_access_token)
 from models.user_model import User
 from models.role_model import Role
 from utils import encrypt
-from app import db
+from database import session
 
 
 class UserService:
@@ -17,7 +17,7 @@ class UserService:
         return self.user_repository.get_user_by_id(user_id)
 
     def get_user_by_username(self, username):
-        return db.session.query(User).filter(User.username == username).first()        
+        return session.query(User).filter(User.username == username).first()        
 
     def check_password(self, user, password):
         return self.bcrypt.check_password_hash(user.password_hash, password)
@@ -32,8 +32,8 @@ class UserService:
             institution=institution,
             role_id=role_id,
         )
-        db.session.add(new_user)
-        db.session.commit()
+        session.add(new_user)
+        session.commit()
         return new_user
 
     def update_user(self, user_id, username, email, password, role, institution):

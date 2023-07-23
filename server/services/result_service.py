@@ -1,5 +1,4 @@
-# result_service.py
-from repositories.result_repository import ResultRepository
+from database import session
 
 
 class ResultService:

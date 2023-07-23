@@ -13,7 +13,7 @@ result_service_obj = ResultService()
 
 result.route("/<int:id>", methods=["GET"])
 def get_result(id):
-    result = db.session.query(Result).filter_by(id=id).first()
+    result = session.query(Result).filter_by(id=id).first()
     if not result:
         return jsonify({"error": "Result not found"}), 404
 
@@ -26,8 +26,8 @@ def create_result():
     quiz_id = data["quiz_id"]
 
     new_result = Result(score=score, quiz_id=quiz_id, user_id=user_id)
-    db.session.add(new_result)
-    db.session.commit()
+    session.add(new_result)
+    session.commit()
     return new_result
         
     

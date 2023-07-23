@@ -1,2 +1,25 @@
 .DS_Store
 .vscode/
+
+# Ignore virtual environment
+venv/
+
+# Ignore compiled Python files
+__pycache__/
+
+# Other entries you may want to include:
+# Ignore any local configurations or secrets
+config.ini
+secrets.ini
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+
+# Ignore database files
+*.db
+
+# Ignore any files or directories you want to exclude from version control
+/path/to/exclude/
