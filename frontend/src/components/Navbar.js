@@ -7,6 +7,7 @@ import {
   BiUserCircle,
   BiCog,
   BiDotsVerticalRounded,
+  BiLineChart, // This is just a placeholder. Please replace this with a suitable icon.
 } from "react-icons/bi";
 
 const StyledNavbar = styled.nav`
@@ -36,6 +37,7 @@ const StyledLink = styled(Link)`
 `;
 
 function Navbar({ authenticated, handleLogout }) {
+  console.log(authenticated);
   return (
     <StyledNavbar>
       <StyledLink to="/">
@@ -59,6 +61,10 @@ function Navbar({ authenticated, handleLogout }) {
           <StyledLink to="/settings">
             <BiCog size={30} />
             Settings
+          </StyledLink>
+          <StyledLink to="/reports">
+            <BiLineChart size={30} />
+            Reports
           </StyledLink>
           <StyledLink to="/logout" onClick={handleLogout}>
             Logout

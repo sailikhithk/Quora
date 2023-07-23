@@ -20,7 +20,10 @@ def create_app():
     app = Flask(__name__)
 
     # Apply CORS to app
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    CORS(
+        app,
+        resources={r"/api/*": {"origins": "*", "methods": ["GET", "POST", "OPTIONS"]}},
+    )
 
     # Configuring the database
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(

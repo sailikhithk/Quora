@@ -1,4 +1,5 @@
-from models import Quiz
+from sqlalchemy import and_
+from models import Quiz, Question, Answer
 
 
 class QuizRepository:
@@ -29,3 +30,12 @@ class QuizRepository:
         if quiz:
             self.db.session.delete(quiz)
             self.db.session.commit()
+
+    # New method to fetch correct answers for a quiz from the database
+    def get_correct_answers(self, quiz_id):
+        return (
+            self.db.session.query(Answer)
+            .join(Question)
+            .filter(and_(Question.quiz_id == quiz_id, Answer.is_correct == True))
+            .all()
+        )

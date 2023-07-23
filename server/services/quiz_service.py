@@ -2,6 +2,7 @@ from repositories.quiz_repository import QuizRepository
 from sqlalchemy.exc import SQLAlchemyError
 from flask import current_app as app
 from models import Quiz
+from models import QuizAttempt, Answer
 
 
 class QuizService:
@@ -10,10 +11,40 @@ class QuizService:
 
     def get_all_quizzes(self):
         try:
-            app.logger.info("QuizService: Fetching all quizzes")  # Logging here
+            app.logger.info("QuizService: Fetching all quizzes")
             return self.quiz_repository.get_all_quizzes()
         except SQLAlchemyError as e:
-            app.logger.error("QuizService: Error fetching quizzes")  # Logging here
+            app.logger.error("QuizService: Error fetching quizzes")
+            app.logger.error(str(e))
+            return None
+
+    def save_answers_and_score(self, quiz_id, user_id, user_answers):
+        try:
+            # Fetch the correct answers from the database
+            correct_answers = self.quiz_repository.get_correct_answers(
+                quiz_id, list(user_answers.keys())
+            )
+
+            correct_answers_dict = {
+                answer.question_id: answer.content for answer in correct_answers
+            }
+
+            # Compare user's answers to the correct ones and calculate the score
+            score = sum(
+                [
+                    1
+                    for question_id, answer in user_answers.items()
+                    if correct_answers_dict.get(question_id) == answer
+                ]
+            )
+
+            # Save the user's score in the database
+            quiz_attempt = QuizAttempt(user_id=user_id, quiz_id=quiz_id, score=score)
+            self.quiz_repository.db.session.add(quiz_attempt)
+            self.quiz_repository.db.session.commit()
+
+        except SQLAlchemyError as e:
+            app.logger.error("QuizService: Error saving user's score")
             app.logger.error(str(e))
             return None
 
