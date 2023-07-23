@@ -28,9 +28,11 @@ const StyledLink = styled(Link)`
 
 function Navbar({ authenticated, handleLogout }) {
   const location = useLocation();
-  const isLoginOrRegisterPage = ["/login", "/register"].includes(
-    location.pathname
-  );
+  const isLoginOrRegisterPage = [
+    "/login",
+    "/register",
+    "/reset-password",
+  ].includes(location.pathname);
 
   return (
     <StyledNavbar>
