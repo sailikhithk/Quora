@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import apiService from "../services/apiService";
 import styled from "styled-components";
 
@@ -30,6 +30,13 @@ const OptionLabel = styled.label`
   }
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-top: 1rem;
+`;
+
 const SubmitButton = styled.button`
   color: #fff;
   background-color: red;
@@ -42,11 +49,23 @@ const SubmitButton = styled.button`
   }
 `;
 
+const GoToDashboardButton = styled.button`
+  color: #fff;
+  background-color: #0a0;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: #0c0;
+  }
+`;
+
 const Quiz = () => {
   const [quiz, setQuiz] = useState(null);
   const [questions, setQuestions] = useState([]);
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const [answers, setAnswers] = useState({});
 
   const fetchQuiz = useCallback(async () => {
@@ -80,10 +99,13 @@ const Quiz = () => {
     }
   };
 
+  const goToDashboard = () => {
+    navigate("/dashboard");
+  };
+
   return (
     <QuizContainer onSubmit={handleSubmit}>
-      <h2 style={{ color: "white" }}>{quiz ? quiz.title : "Loading..."}</h2>{" "}
-      {/* Color of quiz title changed to white */}
+      <h2 style={{ color: "white" }}>{quiz ? quiz.title : "Loading..."}</h2>
       {questions.map((question) => (
         <QuestionContainer key={question.id}>
           <p>{question.content}</p>
@@ -101,7 +123,12 @@ const Quiz = () => {
           ))}
         </QuestionContainer>
       ))}
-      <SubmitButton type="submit">Submit Quiz</SubmitButton>
+      <ButtonContainer>
+        <SubmitButton type="submit">Submit Quiz</SubmitButton>
+        <GoToDashboardButton onClick={goToDashboard}>
+          Go to Dashboard
+        </GoToDashboardButton>
+      </ButtonContainer>
     </QuizContainer>
   );
 };
