@@ -1,8 +1,9 @@
+import traceback
 from flask_jwt_extended import (create_access_token)
 
 from models.user_model import User
 from models.role_model import Role
-from utils import encrypt
+from utils import encrypt, decrypt
 from database import session
 
 
@@ -53,8 +54,9 @@ class UserService:
             return {"error": "Invalid username or password"}
         
         hashpwd = user.password_hash
-        pwd_exists =  check_password_hash(hashpwd,password)
-        if pwd_exists:
+        db_password = decrypt(hashpwd)
+        
+        if db_password == password:
             user_data = {
                 "user_name": user.username,
                 "email": user.email,
@@ -64,26 +66,31 @@ class UserService:
             access_token = create_access_token(identity=user_data)
             return {"access_token": access_token}
         else:
+            print("db_password", db_password)
+            print("password", password)
             return {"error": "Invalid username or password"}
         
     def register_user(self, data):
-        username = data["username"]
-        password = data["password"]
-        email = data["email"]
-        institution = data["institution"]
-        role_name = data["role"]
+        try:
+            username = data["username"]
+            password = data["password"]
+            email = data["email"]
+            institution = data["institution"]
+            role_name = data["role"]
 
-        role = Role.query.filter_by(name=role_name).first()
-        if role is None:
-            return {"error": f"Role '{role_name}' not found."}
-        
-        role_id = role.id
-        user = self.create_user(username, password, email, institution, role_id)
-        if user:
-            return {"message": f"User created plese login from login page"}
-        else:
-            return {"message": f"User not created"}
-
+            role = session.query(Role).filter_by(name=role_name).first()
+            if role is None:
+                return {"error": f"Role '{role_name}' not found."}
+            
+            role_id = role.id
+            user = self.create_user(username, password, email, institution, role_id)
+            if user:
+                return {"message": f"User created plese login from login page"}
+            else:
+                return {"message": f"User not created"}
+        except Exception as e:
+            traceback.print_exc()
+                    
 
 
 

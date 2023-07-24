@@ -1,7 +1,7 @@
 #Cryptography
 from cryptography.fernet import Fernet
 
-encrypt_key=b'secret message!'
+encrypt_key='dHAphTsGijvUR6D0huM9bDqifYN3JPcI6WSLRkbj_EY='
 
 def encrypt(data):
     data = data.encode()
