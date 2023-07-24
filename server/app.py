@@ -4,6 +4,8 @@ import logging
 
 from flask import Flask
 from flask_cors import CORS
+from datetime import timedelta
+
 
 # Registering the blueprints after initializing the app
 from routes.user import user as user_router
@@ -16,6 +18,7 @@ from database import Base, engine
 app = Flask(__name__)
 
 app.config['JWT_SECRET_KEY'] = 'your-secret-key'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=30)
 jwt = JWTManager(app)
 
 # Apply CORS to app
@@ -28,7 +31,7 @@ logger = logging.getLogger(__name__)
 # Registering the blueprints
 app.register_blueprint(user_router, url_prefix='/auth')
 app.register_blueprint(quiz_router, url_prefix='/quiz')
-# app.register_blueprint(question_router)
+app.register_blueprint(question_router, url_prefix='/question')
 # app.register_blueprint(answer_router)
 # app.register_blueprint(result_router)
 

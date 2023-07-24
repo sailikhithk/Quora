@@ -20,3 +20,6 @@ def obj_to_list(data):
         temp_dic.pop("_sa_instance_state", None)
         list_dicts.append(temp_dic)
     return list_dicts
+
+def obj_to_dict(data):
+    return {c.name: getattr(data, c.name) for c in data.__table__.columns}

@@ -9,7 +9,7 @@ logger = logging.getLogger('answer')
 answer_service_obj = AnswerService()
 
 
-answer.route("/<int:id>", methods=["GET"])
+@answer.route("/<int:id>", methods=["GET"])
 def get_answer(id):
     answer = answer_service_obj.get_answer_by_id(id)
     if not answer:
@@ -17,7 +17,7 @@ def get_answer(id):
 
     return jsonify(answer)
 
-answer.route("/", methods=["POST"])
+@answer.route("/", methods=["POST"])
 def create_answer():
     data = request.get_json()
     content = data["content"]

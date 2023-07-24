@@ -1,6 +1,6 @@
 from models.question_model import Question
 from database import session
-from utils import obj_to_list
+from utils import obj_to_list, obj_to_dict
 
 
 class QuestionService:
@@ -11,7 +11,8 @@ class QuestionService:
         return self.question_repository.get_all_questions()
 
     def get_question_by_id(self, question_id):
-        return session.query(Question).filter_by(id=question_id).first()
+        question = session.query(Question).filter_by(id=question_id).first()
+        return obj_to_dict(question)
 
     def create_question(self, content, quiz_id):
         new_question = Question(content=content, quiz_id=quiz_id)
