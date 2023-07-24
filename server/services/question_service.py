@@ -21,18 +21,18 @@ class QuestionService:
         return {"message": "Question created"}
     
     def update_question(self, question_id, content):
-        question = self.session.query(Question).filter_by(id=question_id).first()
+        question = session.query(Question).filter_by(id=question_id).first()
         if question:
             question.content = content
-            self.session.commit()
+            session.commit()
         return question
 
 
     def delete_question(self, question_id):
-        question = self.session.query(Question).filter_by(id=question_id).first()
+        question = session.query(Question).filter_by(id=question_id).first()
         if question:
-            self.session.delete(question)
-            self.session.commit()
+            session.delete(question)
+            session.commit()
 
     # def get_questions_by_quiz(self, quiz_id):
     #     return self.question_repository.get_questions_by_quiz(quiz_id)

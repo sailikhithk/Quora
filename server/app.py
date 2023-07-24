@@ -11,6 +11,9 @@ from datetime import timedelta
 from routes.user import user as user_router
 from routes.quiz import quiz as quiz_router
 from routes.question import question as question_router
+from routes.answer import answer as answer_router
+from routes.result import result as result_router
+
 from flask_jwt_extended import JWTManager
 
 from database import Base, engine
@@ -32,8 +35,8 @@ logger = logging.getLogger(__name__)
 app.register_blueprint(user_router, url_prefix='/auth')
 app.register_blueprint(quiz_router, url_prefix='/quiz')
 app.register_blueprint(question_router, url_prefix='/question')
-# app.register_blueprint(answer_router)
-# app.register_blueprint(result_router)
+app.register_blueprint(answer_router, url_prefix='/answer')
+app.register_blueprint(result_router, url_prefix='/result')
 
 
 if __name__ == "__main__":
