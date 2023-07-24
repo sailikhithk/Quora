@@ -1,19 +1,16 @@
-# question_model.py
-from db import db
+from database import Base
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, Text
+from sqlalchemy.orm import relationship
 
-
-class Question(db.Model):
+class Question(Base):
     __tablename__ = "questions"
 
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(128))
-    quiz_id = db.Column(db.Integer, db.ForeignKey("quizzes.id"), nullable=False)
+    id = Column(Integer, primary_key=True)
+    content = Column(String)
+    quiz_id = Column(Integer, ForeignKey("quizzes.id"))
 
     # Relationships
-    quiz = db.relationship("Quiz", back_populates="questions", overlaps="quiz_question")
+    answers = relationship("Answer", backref="question", lazy="dynamic")
 
     def __repr__(self):
         return "<Question %r>" % self.content
-
-    def serialize(self):
-        return {"id": self.id, "content": self.content, "quiz_id": self.quiz_id}

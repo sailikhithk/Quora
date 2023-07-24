@@ -1,14 +1,15 @@
-# result_model.py
-from db import db
+from database import Base
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, Text, Float
+from sqlalchemy.orm import relationship, backref
 
 
-class Result(db.Model):
+class Result(Base):
     __tablename__ = "results"
 
-    id = db.Column(db.Integer, primary_key=True)
-    score = db.Column(db.Float)
-    quiz_id = db.Column(db.Integer, db.ForeignKey("quizzes.id"))
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    id = Column(Integer, primary_key=True)
+    score = Column(Float)
+    quiz_id = Column(Integer, ForeignKey("quizzes.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
 
     def __repr__(self):
         return "<Result %r>" % self.id
