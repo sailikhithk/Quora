@@ -19,19 +19,21 @@ def get_all_quizzes():
     quizzes = quiz_service_obj.get_all_quizzes()
     return jsonify(quizzes), 200
 
-@quiz.route("/create_quiz", methods=["POST"])
+@quiz.route("/upload_quiz", methods=["POST"])
 @jwt_required()
-def create_quiz():
+def upload_quiz():
     data = request.get_json()
     identity = get_jwt_identity()
     user_id = identity['user_id']    
-    title = data["title"]
-    response = quiz_service_obj.create_quiz(title, user_id)
+    quiz_name = data["quiz_name"]
+    questions = data['questions']
+    pass_marks = data['pass_marks']
+    next_quiz_to_unlock = data['next_quiz_to_unlock']
+    response = quiz_service_obj.upload_quiz(user_id, quiz_name, questions, pass_marks, next_quiz_to_unlock)
     return jsonify(response)
 
-@quiz.route("/<int:quiz_id>/create_questions", methods=["POST"])
-def add_question_to_quiz(quiz_id):
-    data = request.get_json()
-    content = data["content"]
-    response = question_service_obj.create_question(content, quiz_id)
+
+@quiz.route("/<int:quiz_id>/questions", methods=["GET"])
+def get_quiz(quiz_id):
+    response = quiz_service_obj.get_quiz(quiz_id)
     return jsonify(response)

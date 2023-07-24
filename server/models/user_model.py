@@ -17,16 +17,9 @@ class User(Base):
     quizzes = relationship(
         "Quiz", backref="quiz_author", lazy="dynamic"
     )  # Notice "Quiz" is a string and 'author' is changed to 'quiz_author'
-    answers = relationship(
-        "Answer", backref="user", lazy="dynamic"
-    )  # Notice "Answer" is a string
     results = relationship(
         "Result", backref="user", lazy="dynamic"
     )  # Notice "Result" is a string
-    # Adding the relationship to the QuizAttempt model
-    quiz_attempts = relationship(
-        "QuizAttempt", back_populates="user", lazy="dynamic", overlaps="attempted_user"
-    )
-
+    
     def __repr__(self):
         return "<User %r>" % self.username

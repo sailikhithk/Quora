@@ -3,9 +3,6 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
 
 from services.result_service import ResultService
-from models.result_model import Result
-
-
 result = Blueprint("result", __name__)
 logger = logging.getLogger('auth')
 
@@ -19,13 +16,15 @@ def get_result(id):
         return jsonify({"error": "Result not found"}), 404
     return jsonify(response)
 
-@result.route("/create_result", methods=["POST"])
+@result.route("/submit_answer", methods=["POST"])
 @jwt_required()
-def create_result():
+def submit_answer():
     data = request.get_json()
-    score = data["score"]
-    quiz_id = data["quiz_id"]
+    content = data["content"]
     identity = get_jwt_identity()
-    user_id = identity['user_id']
-    response = result_service_obj.create_result(score, quiz_id, user_id)
-    return jsonify(response)
+    user_id = identity['user_id']    
+    quiz_id = data['quiz_id']
+    answer = result_service_obj.submit_answer(
+        content, user_id, quiz_id
+    )
+    return jsonify(answer)

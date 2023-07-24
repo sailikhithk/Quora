@@ -17,12 +17,3 @@ def get_question(id):
         return jsonify({"error": "Question not found"}), 404
 
     return jsonify(question)
-
-@question.route("/create_question", methods=["POST"])
-@jwt_required()
-def create_question():
-    data = request.get_json()
-    content = data["content"]
-    quiz_id = data["quiz_id"]
-    question = question_service_obj.create_question(content, quiz_id)
-    return jsonify(question)
