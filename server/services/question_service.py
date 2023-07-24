@@ -1,5 +1,6 @@
 from models.question_model import Question
 from database import session
+from utils import obj_to_list
 
 
 class QuestionService:
@@ -14,9 +15,9 @@ class QuestionService:
 
     def create_question(self, content, quiz_id):
         new_question = Question(content=content, quiz_id=quiz_id)
-        self.session.add(new_question)
-        self.session.commit()
-        return new_question
+        session.add(new_question)
+        session.commit()
+        return {"message": "Question created"}
     
     def update_question(self, question_id, content):
         question = self.session.query(Question).filter_by(id=question_id).first()

@@ -19,10 +19,7 @@ class UserService:
 
     def get_user_by_username(self, username):
         return session.query(User).filter(User.username == username).first()        
-
-    def check_password(self, user, password):
-        return self.bcrypt.check_password_hash(user.password_hash, password)
-
+    
     def create_user(self, username, password, email, institution, role_id):
         
         hashed_password = encrypt(password)    
@@ -37,14 +34,14 @@ class UserService:
         session.commit()
         return new_user
 
-    def update_user(self, user_id, username, email, password, role, institution):
-        hashed_password = self.bcrypt.generate_password_hash(password).decode("utf-8")
-        return self.user_repository.update_user(
-            user_id, username, email, hashed_password, role, institution
-        )
+    # def update_user(self, user_id, username, email, password, role, institution):
+    #     hashed_password = self.bcrypt.generate_password_hash(password).decode("utf-8")
+    #     return self.user_repository.update_user(
+    #         user_id, username, email, hashed_password, role, institution
+    #     )
 
-    def delete_user(self, user_id):
-        return self.user_repository.delete_user(user_id)
+    # def delete_user(self, user_id):
+    #     return self.user_repository.delete_user(user_id)
 
     def login_user(self, data):
         user_name = data["username"]
@@ -61,7 +58,8 @@ class UserService:
                 "user_name": user.username,
                 "email": user.email,
                 "institution": user.institution,
-                "role_id": user.role_id
+                "role_id": user.role_id,
+                "user_id": user.id
             }
             access_token = create_access_token(identity=user_data)
             return {"access_token": access_token}

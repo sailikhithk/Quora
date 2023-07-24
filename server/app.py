@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 # Registering the blueprints
 app.register_blueprint(user_router, url_prefix='/auth')
-# app.register_blueprint(quiz_router)
+app.register_blueprint(quiz_router, url_prefix='/quiz')
 # app.register_blueprint(question_router)
 # app.register_blueprint(answer_router)
 # app.register_blueprint(result_router)

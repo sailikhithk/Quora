@@ -1,7 +1,6 @@
 from models import Quiz
 from database import session
 from utils import obj_to_list
-
 class QuizService:
     def __init__(self):
         pass

@@ -5,7 +5,7 @@ from flask import Blueprint, request, jsonify
 from services.user_service import UserService
 
 user = Blueprint("user", __name__)
-logger = logging.getLogger('auth')
+logger = logging.getLogger('user')
 # logger.info('Login page accessed')
 
 user_service_obj = UserService()
