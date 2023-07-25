@@ -51,8 +51,6 @@
 │       ├── services
 │       │   └── apiService.js
 │       └── setupTests.js
-├── package-lock.json
-├── package.json
 ├── quora.egg-info
 │   ├── PKG-INFO
 │   ├── SOURCES.txt
@@ -63,6 +61,7 @@
 │   ├── app.db
 │   ├── app.py
 │   ├── create_db.py
+│   ├── database.py
 │   ├── models
 │   │   ├── __init__.py
 │   │   ├── question_model.py
@@ -87,4 +86,4 @@
 ├── setup.py
 └── tree.txt
 
-17 directories, 71 files
+17 directories, 70 files
