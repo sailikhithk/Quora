@@ -6,12 +6,14 @@ from utils import obj_to_list, obj_to_dict
 class QuestionService:
     def __init__(self):
         pass
-    
+
     def get_all_questions(self):
         return self.question_repository.get_all_questions()
 
     def get_question_by_id(self, question_id):
         question = session.query(Question).filter_by(id=question_id).first()
+        if not question:
+            return {"error": "Question not found"}
         return obj_to_dict(question)
 
     def create_question(self, content, quiz_id):
@@ -19,7 +21,7 @@ class QuestionService:
         session.add(new_question)
         session.commit()
         return {"message": "Question created"}
-    
+
     def update_question(self, question_id, content):
         question = session.query(Question).filter_by(id=question_id).first()
         if question:
@@ -27,12 +29,8 @@ class QuestionService:
             session.commit()
         return question
 
-
     def delete_question(self, question_id):
         question = session.query(Question).filter_by(id=question_id).first()
         if question:
             session.delete(question)
             session.commit()
-
-    # def get_questions_by_quiz(self, quiz_id):
-    #     return self.question_repository.get_questions_by_quiz(quiz_id)

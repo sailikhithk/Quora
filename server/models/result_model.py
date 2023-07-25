@@ -1,5 +1,15 @@
 from database import Base
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, Text, Float, JSON
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    DateTime,
+    Boolean,
+    ForeignKey,
+    Text,
+    Float,
+    JSON,
+)
 from sqlalchemy.orm import relationship, backref
 
 

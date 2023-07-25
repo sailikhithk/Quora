@@ -1,5 +1,4 @@
 .
-├── 1.png
 ├── LICENSE
 ├── README.md
 ├── build
@@ -7,6 +6,7 @@
 ├── dist
 │   ├── quora-0.1.0-py3-none-any.whl
 │   └── quora-0.1.0.tar.gz
+├── features.txt
 ├── frontend
 │   ├── README.md
 │   ├── package-lock.json
@@ -51,6 +51,8 @@
 │       ├── services
 │       │   └── apiService.js
 │       └── setupTests.js
+├── package-lock.json
+├── package.json
 ├── quora.egg-info
 │   ├── PKG-INFO
 │   ├── SOURCES.txt
@@ -60,45 +62,29 @@
 ├── server
 │   ├── app.db
 │   ├── app.py
-│   ├── controllers
-│   │   ├── __init__.py
-│   │   ├── answer_controller.py
-│   │   ├── question_controller.py
-│   │   ├── quiz_controller.py
-│   │   ├── result_controller.py
-│   │   └── user_controller.py
 │   ├── create_db.py
-│   ├── db.py
 │   ├── models
 │   │   ├── __init__.py
-│   │   ├── answer_model.py
 │   │   ├── question_model.py
-│   │   ├── quiz_attempt_model.py
 │   │   ├── quiz_model.py
 │   │   ├── result_model.py
 │   │   ├── role_model.py
 │   │   └── user_model.py
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── repositories
-│   │   ├── __init__.py
-│   │   ├── answer_repository.py
-│   │   ├── question_repository.py
-│   │   ├── quiz_repository.py
-│   │   ├── result_repository.py
-│   │   └── user_repository.py
 │   ├── requirements.txt
 │   ├── routes
 │   │   ├── __init__.py
-│   │   └── routes.py
-│   └── services
-│       ├── __init__.py
-│       ├── answer_service.py
-│       ├── question_service.py
-│       ├── quiz_service.py
-│       ├── result_service.py
-│       └── user_service.py
+│   │   ├── question.py
+│   │   ├── quiz.py
+│   │   ├── result.py
+│   │   └── user.py
+│   ├── services
+│   │   ├── __init__.py
+│   │   ├── question_service.py
+│   │   ├── quiz_service.py
+│   │   ├── result_service.py
+│   │   └── user_service.py
+│   └── utils.py
 ├── setup.py
 └── tree.txt
 
-19 directories, 83 files
+17 directories, 71 files

@@ -20,6 +20,6 @@ class User(Base):
     results = relationship(
         "Result", backref="user", lazy="dynamic"
     )  # Notice "Result" is a string
-    
+
     def __repr__(self):
         return "<User %r>" % self.username

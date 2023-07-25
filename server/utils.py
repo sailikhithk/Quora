@@ -1,17 +1,20 @@
-#Cryptography
+# Cryptography
 from cryptography.fernet import Fernet
 
-encrypt_key='dHAphTsGijvUR6D0huM9bDqifYN3JPcI6WSLRkbj_EY='
+encrypt_key = "dHAphTsGijvUR6D0huM9bDqifYN3JPcI6WSLRkbj_EY="
+
 
 def encrypt(data):
     data = data.encode()
     f = Fernet(encrypt_key)
-    return f.encrypt(data).decode('utf-8')
+    return f.encrypt(data).decode("utf-8")
+
 
 def decrypt(data):
     data = data.encode()
     f = Fernet(encrypt_key)
-    return f.decrypt(data).decode('utf-8')
+    return f.decrypt(data).decode("utf-8")
+
 
 def obj_to_list(data):
     list_dicts = []
@@ -20,6 +23,7 @@ def obj_to_list(data):
         temp_dic.pop("_sa_instance_state", None)
         list_dicts.append(temp_dic)
     return list_dicts
+
 
 def obj_to_dict(data):
     return {c.name: getattr(data, c.name) for c in data.__table__.columns}
