@@ -140,9 +140,9 @@ function Register({ handleRegister }) {
           }}
         >
           <option value="">Select Role...</option>
-          <option value="student">Student</option>
-          <option value="teacher">Teacher</option>
-          <option value="admin">Admin</option>
+          <option value="Student">Student</option>
+          <option value="Teacher">Teacher</option>
+          <option value="Admin">Admin</option>
         </select>
         <InputSubmit value="Register" />
         <p>

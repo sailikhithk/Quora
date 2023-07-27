@@ -50,7 +50,7 @@ const App = () => {
       password: password,
     };
 
-    await api.post("/api/login", data);
+    await api.post("/auth/login", data);
     setAuthenticated(true);
   };
 
@@ -69,7 +69,7 @@ const App = () => {
       institution: institution,
     };
 
-    await api.post("/api/user/register", data);
+    await api.post("/auth/register", data);
     setAuthenticated(true);
   };
 

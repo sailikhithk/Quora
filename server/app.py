@@ -24,7 +24,7 @@ app = Flask(__name__)
 def after_request(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
-    response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
+    response.headers.add("Access-Control-Allow-Methods", "GET,POST")
     return response
 
 
@@ -33,7 +33,7 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
 jwt = JWTManager(app)
 
 # Apply CORS to app
-# CORS(app, resources={r"/api/*": {"origins": "*"}})
+# CORS(app, resources={r"*": {"origins": "*"}})
 
 
 # Configure logging
