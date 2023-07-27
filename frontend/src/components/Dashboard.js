@@ -73,7 +73,7 @@ const Dashboard = () => {
 
   const fetchQuizzes = async () => {
     try {
-      const response = await apiService.get("/quiz");
+      const response = await apiService.get("quiz/list");
       setQuizzes(response.data);
       console.log(response.data);
       setLoading(false);

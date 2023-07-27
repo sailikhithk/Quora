@@ -101,7 +101,7 @@ function Login({ handleLogin }) {
         username,
         password,
       });
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("token", res.data.access_token); // changed "token" to "access_token"
       alert("Login successful!");
       handleLogin();
       navigate("/dashboard");

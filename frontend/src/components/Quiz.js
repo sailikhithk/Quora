@@ -71,13 +71,10 @@ const Quiz = () => {
 
   const fetchQuiz = useCallback(async () => {
     try {
-      const response = await apiService.get(`/quiz/${id}`);
-      const apiQuestions = response.data.questions.map((question) => ({
-        ...question,
-        answers: ["Option 1", "Option 2", "Option 3", "Option 4"],
-      }));
+      const response = await apiService.get(`/quiz/${id}/questions`);
+      console.log("API Response:", response.data);
       setQuiz(response.data);
-      setQuestions(apiQuestions);
+      setQuestions(response.data.questions);
     } catch (error) {
       console.error(error);
     }
@@ -94,7 +91,19 @@ const Quiz = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await apiService.post(`/quiz/${id}/submit`, answers);
+      const formattedAnswers = Object.keys(answers).map((question_id) => ({
+        question_id,
+        selected_options: [answers[question_id]],
+      }));
+      const payload = {
+        quiz_id: id,
+        content: formattedAnswers,
+      };
+      const response = await apiService.post(`/result/submit_answer`, payload); // removed headers configuration
+
+      // Alert the user with their score
+      alert(`Your score is: ${response.data.score}`);
+      navigate("/result");
     } catch (error) {
       console.error(error);
     }
@@ -109,8 +118,8 @@ const Quiz = () => {
       <h2 style={{ color: "white" }}>{quiz ? quiz.title : "Loading..."}</h2>
       {questions.map((question) => (
         <QuestionContainer key={question.id}>
-          <p>{question.content}</p>
-          {question.answers.map((answer, index) => (
+          <p>{question.content.question}</p>
+          {question.content.options.map((answer, index) => (
             <OptionLabel key={index}>
               <OptionInput
                 type="radio"
