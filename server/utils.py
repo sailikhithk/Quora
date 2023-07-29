@@ -19,11 +19,19 @@ def decrypt(data):
 def obj_to_list(data):
     list_dicts = []
     for obj in data:
-        temp_dic = obj.__dict__
-        temp_dic.pop("_sa_instance_state", None)
-        list_dicts.append(temp_dic)
+        list_dicts.append(obj_to_dict(obj))        
     return list_dicts
 
 
 def obj_to_dict(data):
-    return {c.name: getattr(data, c.name) for c in data.__table__.columns}
+    response = {}
+    for c in data.__table__.columns:
+        print("c.name", c.name)
+        if c.name not in ["created_date", "updated_date"]:
+            response[c.name] = getattr(data, c.name)
+        else:
+            response[c.name] = str(getattr(data, c.name))
+    print(response)
+    return response
+    
+    

@@ -47,8 +47,10 @@ def before_request():
     print("Method:", request.method)
     # print("Headers:", request.headers)
     print("Query Params:", request.args)
-    print("Body:", request.get_json())
-
+    if request.method in ["POST"]:
+        print("Body:", request.get_json())
+    else:
+        print("Body: No request body")
 @app.after_request
 def after_request(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
