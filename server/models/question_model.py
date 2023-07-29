@@ -1,15 +1,7 @@
+import datetime
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean, Float, JSON
+from sqlalchemy.sql import func
 from database import Base
-from sqlalchemy import (
-    Column,
-    Integer,
-    String,
-    DateTime,
-    Boolean,
-    ForeignKey,
-    Text,
-    JSON,
-    Float,
-)
 from sqlalchemy.orm import relationship
 
 
@@ -19,7 +11,5 @@ class Question(Base):
     id = Column(Integer, primary_key=True)
     content = Column(JSON)
     quiz_id = Column(Integer, ForeignKey("quizzes.id"))
-    # Relationships
-
-    def __repr__(self):
-        return "<Question %r>" % self.content
+    created_date = Column(DateTime, default=func.now(), nullable=False)
+    updated_date = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)

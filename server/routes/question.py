@@ -1,4 +1,5 @@
 import logging
+import traceback
 
 from flask import Blueprint, request, jsonify
 from services.question_service import QuestionService
@@ -12,8 +13,12 @@ question_service_obj = QuestionService()
 
 @question.route("/<int:id>/get_question", methods=["GET"])
 def get_question(id):
-    question = question_service_obj.get_question_by_id(id)
-    if not question:
-        return jsonify({"error": "Question not found"}), 404
+    try:
+        question = question_service_obj.get_question_by_id(id)
+        if not question:
+            return jsonify({"error": "Question not found"}), 404
 
-    return jsonify(question)
+        return jsonify(question)
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500

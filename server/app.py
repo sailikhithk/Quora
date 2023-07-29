@@ -2,7 +2,7 @@
 import os
 import logging
 
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from datetime import timedelta
 
@@ -18,15 +18,6 @@ from flask_jwt_extended import JWTManager
 from database import Base, engine
 
 app = Flask(__name__)
-
-
-@app.after_request
-def after_request(response):
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
-    response.headers.add("Access-Control-Allow-Methods", "GET,POST")
-    return response
-
 
 app.config["JWT_SECRET_KEY"] = "your-secret-key"
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
@@ -48,6 +39,28 @@ app.register_blueprint(quiz_router, url_prefix="/quiz")
 app.register_blueprint(question_router, url_prefix="/question")
 app.register_blueprint(result_router, url_prefix="/result")
 
+@app.before_request
+def before_request():
+    print()
+    print("Request Received:")
+    print("URL:", request.url)
+    print("Method:", request.method)
+    # print("Headers:", request.headers)
+    print("Query Params:", request.args)
+    print("Body:", request.get_json())
+
+@app.after_request
+def after_request(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET,POST")
+    
+    print()
+    print("Response Sent:")
+    print("Status Code:", response.status_code)
+    # print("Headers:", response.headers)
+    print("Data:", response.get_data(as_text=True))
+    return response
 
 if __name__ == "__main__":
     from models.question_model import Question
