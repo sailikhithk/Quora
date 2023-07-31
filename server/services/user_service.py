@@ -15,10 +15,10 @@ class UserService:
         return self.user_repository.get_all_users()
 
     def get_user_by_id(self, user_id):
-        return session.query(User).filter_by(id = user_id).first()
-        
+        return session.query(User).filter_by(id=user_id).first()
+
     def get_user_by_username(self, username):
-        return session.query(User).filter_by(username == username).first()
+        return session.query(User).filter_by(username=username).first()
 
     def create_user(self, username, password, email, institution, role_id):
         hashed_password = encrypt(password)
@@ -59,14 +59,14 @@ class UserService:
             return {"error": "Invalid username or password"}
 
     def is_valid_admin(self, user_id):
-        admin_role = session.query(Role).filter_by(name= 'Admin').first()
+        admin_role = session.query(Role).filter_by(name="Admin").first()
         admin_id = admin_role.id
-        user = session.query(User).filter_by(id = user_id).filter_by(role_id = admin_id)
+        user = session.query(User).filter_by(id=user_id).filter_by(role_id=admin_id)
         if user:
             return True
         else:
             return False
-        
+
     def reset_password(self, data):
         password = data["password"]
         user_id = data["user_id"]
@@ -76,7 +76,7 @@ class UserService:
         user.password_hash = hashed_password
         session.commit()
         return {"message": "Password updated, relogin again"}
-    
+
     def register_user(self, data):
         try:
             username = data["username"]
