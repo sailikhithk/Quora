@@ -18,6 +18,16 @@ question_service_obj = QuestionService()
 quiz_service_obj = QuizService()
 
 
+# @quiz.route("/<int:user_id>/list", methods=["GET"])
+# def get_all_quizzes(user_id):
+#     try:
+#         quizzes = quiz_service_obj.get_all_quizzes(user_id)
+#         return jsonify(quizzes), 200
+#     except Exception as e:
+#         traceback.print_exc()
+#         return jsonify({"error": str(e)}), 500
+
+
 @quiz.route("/<int:user_id>/list", methods=["GET"])
 def get_all_quizzes(user_id):
     try:
