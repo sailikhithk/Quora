@@ -5,6 +5,9 @@ from sqlalchemy.orm import aliased
 from sqlalchemy import desc, and_
 from utils import obj_to_list, obj_to_dict
 
+import pandas as pd
+import traceback
+
 question_service_obj = QuestionService()
 class QuizService:
     def __init__(self):
@@ -63,33 +66,137 @@ class QuizService:
             title=title,
             author_id=user_id,
             pass_marks=pass_marks,
-            next_quiz_to_unlock=",".join([str(x) for x in next_quiz_to_unlock]),
+            next_quiz_to_unlock=next_quiz_to_unlock,
         )
         session.add(new_quiz)
         session.commit()
         return {"message": "Quiz created", "id": new_quiz.id}
-
-    def update_quiz(self, quiz_id, title):
-        quiz = session.query(Quiz).filter_by(id=quiz_id).first()
-        if quiz:
-            quiz.title = title
-            session.commit()
-        return quiz
-
+    
     def delete_quiz(self, quiz_id):
         quiz = session.query(Quiz).filter_by(id=quiz_id).first()
         if quiz:
             session.delete(quiz)
             session.commit()
+        return {"message": "Quiz Deleted"}
 
-    def upload_quiz(
-        self, user_id, quiz_name, questions, pass_marks, next_quiz_to_unlock
-    ):
+    def combine_options(self, row):
+        return [row['Option 1'], row['Option 2'], row['Option 3'], row['Option 4']]
+    
+    def split_options(self, row):
+        return pd.Series(row['options'] + [None] * (4 - len(row['options'])))
+
+    def upsert_quiz_file(self, file, user_id, quiz_id):
+        try:
+            meta_data = pd.read_excel(file, header=0, skiprows=0, nrows=4)
+            meta_data_dic = dict(zip(meta_data['preference'], meta_data['value']))
+            meta_data_dic['quiz_name'] = meta_data_dic['Name']
+            meta_data_dic['pass_marks'] = meta_data_dic['Pass Marks']
+            meta_data_dic['next_quiz_to_unlock'] = meta_data_dic['next quiz to unlock']
+            meta_data_dic.pop("Name", None)
+            meta_data_dic.pop("Pass Marks", None)
+            meta_data_dic.pop("next quiz to unlock", None)
+
+            questions_df = pd.read_excel(file, header=6)
+            column_mapping = {
+                'Questions': 'questions',
+                'Correct Answers': 'correct_option',
+                "Marks": "marks",
+                "Mandatory": "is_mandatory"
+
+            }
+
+            questions_df = questions_df.rename(columns=column_mapping)
+            questions_df['is_mandatory'] = questions_df['is_mandatory'].map(lambda x: bool(x))
+            questions_df['options'] = questions_df.apply(self.combine_options, axis=1)
+            questions_df['correct_option'] = questions_df['correct_option'].astype(str)
+            questions_df['correct_option'] = questions_df['correct_option'].apply(lambda x: list(map(int, x.split(','))))
+            questions_df.drop(['Option 1', 'Option 2', 'Option 3', 'Option 4'], axis=1, inplace=True)
+            questions_df['is_mandatory'] = True
+
+            result_list = questions_df.to_dict(orient='records')
+
+            print("result_list:", result_list)
+
+            meta_data_dic["questions"] = result_list
+            meta_data_dic["user_id"] = user_id
+            
+            if quiz_id:
+                meta_data_dic["quiz_id"] = quiz_id
+                pass
+            else:
+                return self.upload_quiz_json(meta_data_dic)
+        except Exception as e :
+            traceback.print_exc()
+            return {"error": str(e)} 
+    
+    def upload_quiz_json(self, data):
+        user_id = data["user_id"]
+        quiz_name = data["quiz_name"]
+        questions = data["questions"]
+        pass_marks = data["pass_marks"]
+        next_quiz_to_unlock = data["next_quiz_to_unlock"]
+
         result = self.create_quiz(quiz_name, user_id, pass_marks, next_quiz_to_unlock)
         quiz_id = result.get("id", None)
         for question in questions:
             question_service_obj.create_question(question, quiz_id)
         return {"message": "Quiz uploaded"}
+
+    def update_quiz_json(self, data):
+        user_id = data["user_id"]
+        quiz_name = data["quiz_name"]
+        questions = data["questions"]
+        pass_marks = data["pass_marks"]
+        next_quiz_to_unlock = data["next_quiz_to_unlock"]
+        quiz_id = data["quiz_id"]
+        quiz = session.query(Quiz).filter_by(quiz_id=quiz_id).first()
+        
+        quiz.title = quiz_name
+        quiz.pass_marks = pass_marks
+        quiz.next_quiz_to_unlock = next_quiz_to_unlock
+        quiz.author_id = user_id
+        session.commit()
+
+        for question in questions:
+            question_service_obj.update_question(question)
+        return {"message": "Quiz uploaded"}
+    
+    def download_quiz(self, quiz_id):
+        quiz = session.query(Quiz).filter_by(id=quiz_id).first()
+        questions = session.query(Question).filter_by(quiz_id=quiz_id).all()
+        questions = obj_to_list(questions)
+        
+        quiz_dic = {
+            "Name": quiz.title,
+            "Total Marks": 100,
+            "Pass Marks": quiz.pass_marks,
+            "next quiz to unlock": quiz.next_quiz_to_unlock
+        }
+        df1 = pd.DataFrame(list(quiz_dic.items()), columns=["preference", "value"])
+        df2 = pd.DataFrame(questions)
+        df2_normalized = pd.json_normalize(df2['content'])
+        df2 = pd.concat([df2.drop(columns='content'), df2_normalized], axis=1)
+        df2['correct_option'] = df2['correct_option'].apply(lambda x: ','.join(map(str, x)))
+        df2[['Option 1', 'Option 2', 'Option 3', 'Option 4']] = df2.apply(self.split_options, axis=1)
+        columns_to_drop = ['created_date', 'updated_date', 'options', 'id']
+        df2.drop(columns=columns_to_drop, inplace=True)
+        
+        
+        column_mapping = {
+                'questions': 'Questions',
+                'correct_option': 'Correct Answers',
+                "marks": "Marks",
+                "is_mandatory": "Mandatory"
+            }
+        df2 = df2.rename(columns=column_mapping)
+        
+        
+        desired_column_order = ['Questions','Option 1','Option 2','Option 3','Option 4','Correct Answers','Marks','Mandatory','quiz_id']        
+        df2 = df2[desired_column_order]
+
+        with pd.ExcelWriter("output.xlsx") as writer:
+            df1.to_excel(writer, sheet_name="Sheet1", index=False)
+            df2.to_excel(writer, sheet_name="Sheet1", index=False, startrow=7, startcol=0)
 
     def get_questions_by_quiz_id(self, id):
         questions = session.query(Question).filter_by(quiz_id=id).all()

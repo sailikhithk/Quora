@@ -17,7 +17,18 @@ def get_question(id):
         question = question_service_obj.get_question_by_id(id)
         if not question:
             return jsonify({"error": "Question not found"}), 404
+        return jsonify(question)
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 
+
+@question.route("/<int:id>/delete_question", methods=["GET"])
+def get_question(id):
+    try:
+        question = question_service_obj.delete_question(id)
+        if not question:
+            return jsonify({"error": "Question not found"}), 404
         return jsonify(question)
     except Exception as e:
         traceback.print_exc()

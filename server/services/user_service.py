@@ -18,7 +18,7 @@ class UserService:
         return session.query(User).filter_by(id = user_id).first()
         
     def get_user_by_username(self, username):
-        return session.query(User).filter_by(username == username).first()
+        return session.query(User).filter_by(username = username).first()
 
     def create_user(self, username, password, email, institution, role_id):
         hashed_password = encrypt(password)

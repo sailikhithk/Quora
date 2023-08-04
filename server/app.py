@@ -47,8 +47,14 @@ def before_request():
     print("Method:", request.method)
     # print("Headers:", request.headers)
     print("Query Params:", request.args)
-    if request.method in ["POST"]:
-        print("Body:", request.get_json())
+    
+    if request.method == "POST":
+        if request.content_type.startswith('application/json'):
+            print("Body (JSON):", request.get_json())
+        elif request.content_type.startswith('multipart/form-data'):
+            print("Form Data:")
+            for key, value in request.form.items():
+                print(f"{key}: {value}")    
     else:
         print("Body: No request body")
 @app.after_request
@@ -60,8 +66,14 @@ def after_request(response):
     print()
     print("Response Sent:")
     print("Status Code:", response.status_code)
-    # print("Headers:", response.headers)
-    print("Data:", response.get_data(as_text=True))
+    print("Content Type:", response.content_type)
+    
+    if response.content_type == "application/json":
+        print("Data:", response.get_json())
+    elif response.content_type.startswith("image/") or response.content_type.startswith("application/"):
+        print("File Response: Not Printing Binary Data")
+    else:
+        print("Data:", response.get_data(as_text=True))    
     return response
 
 if __name__ == "__main__":
@@ -82,9 +94,10 @@ if __name__ == "__main__":
     )
 
     create_dummy_roles()
-    create_dummy_users()
-    create_dummy_quizzes()
-    create_dummy_questions()
-    create_dummy_results()
+    # create_dummy_users()
+    
+    # create_dummy_quizzes()
+    # create_dummy_questions()
+    # create_dummy_results()
 
     app.run(debug=True)

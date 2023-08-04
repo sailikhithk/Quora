@@ -22,7 +22,9 @@ class QuestionService:
         session.commit()
         return {"message": "Question created"}
 
-    def update_question(self, question_id, content):
+    def update_question(self, content):
+        question_id = content['id']
+        content.pop('id', None)
         question = session.query(Question).filter_by(id=question_id).first()
         if question:
             question.content = content
@@ -34,3 +36,4 @@ class QuestionService:
         if question:
             session.delete(question)
             session.commit()
+        return {"message": "Question Deleted"}

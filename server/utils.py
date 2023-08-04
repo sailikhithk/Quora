@@ -26,12 +26,10 @@ def obj_to_list(data):
 def obj_to_dict(data):
     response = {}
     for c in data.__table__.columns:
-        print("c.name", c.name)
         if c.name not in ["created_date", "updated_date"]:
             response[c.name] = getattr(data, c.name)
         else:
             response[c.name] = str(getattr(data, c.name))
-    print(response)
     return response
     
     
