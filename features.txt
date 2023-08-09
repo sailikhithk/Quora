@@ -1,0 +1,64 @@
+Website implementation requirements
+• Website
+• Shall provide student and teacher accounts. Student accounts can be created through self registration. Where as teacher accounts are created through admin account.
+• Shall provide a lock mechanism to next lessons tied to test results. Unlock only when test score is > 80%. If student score in a test is < 80%, he should be prompted to take another test corresponding to the lesson.
+Multiple tests may correspond to a single test.
+• Test pages can be populated based on a text file and the answers also can be given as text files in a specific directory of the website server. Each test page allows unlocking only a specific lesson.
+• Website shall display stats showing how many student accounts and how many visits to the site.
+• As student login to the site first time, the lessons and and tests should be displayed in with hyperlinks disabled except for the first lesson.
+• Test page can be just displaying an image that has multiple choice questions
+• However answer sheet would be in the format of question number followed by the students answer response. Answer sheet evaluation would be based on the key supplied by the admin corresponding to a given test.
+• All Test and answers are numbered and titled.
+• Website layout can be decided based on the sample provided.
+• When student takes a test, the test results shall be emailed to the student and optionally to admin email account.
+. JSON QUIZ ANSWERS TO DB -> Similar to dynamo db to avoid multiple rows for same question answered by multiple students. 
+
+
+
+
+Plan and Schedules
+• 1st release - 1 week
+• A skeleton website with ability to create student account, teacher account and admin accounts. Only 1 admin account with password recovery using email.
+• The website hosted on a free public hosting location like digital oceans etc for testing purpose
+• 2nd release - 2 week
+• Ability to take the test and lesson pages as textile inputs and populate the pages for student accounts and tracking the student's progress with the testing and lessons.
+Full website operational and can be hosted on a free domain or on single independent linux system.
+• All Code is to be provided and no automatic code generation tools to be used. As this is for academic purposes.
+• 3rd release - 3 week
+• Support and any bug fixes during the deployment/live.
+
+
+Functionality:
+
+I now have a clearer picture of what you want. Here are some suggestions for the various features based on your description:
+1. User Roles: There will be three roles - admin, teacher, and student.
+	• Admin can manage users, provision quizzes, and view a dashboard with students' progress.
+	• Teachers can add questions to quizzes, and view answers of their students.
+	• Students can go through lessons, take quizzes and see their own progress.
+2. Content Creation: It seems like quizzes are image-based with MCQs. For content creation, we will allow uploading these images and setting up questions with ABCD options. We can allow text and image content to accommodate this.
+3. Progress Tracking: A student's progress will be tracked in terms of lessons taken and quizzes passed. This will be visible to the student, their teacher, and the admin.
+4. Test Re-attempts: If a student scores less than 80%, they will be prompted to retake the same quiz until they achieve a passing score.
+5. Email Notifications: The email notification to students will contain their overall score. For admin, we can include more details like the questions answered incorrectly.
+6. Website Stats: These stats will be displayed on an admin-accessible dashboard and will contain the number of students, number of quizzes taken, average scores, etc., segregated by institution.
+7. Hosting and Deployment: As per your previous mention, the site will be hosted on a public hosting platform like Digital Ocean. The setup of the server and deployment will be part of the project.
+8. Codebase: The project will be custom-coded, and all code will be provided as per your request.
+9. Tech Stack: Based on our discussion so far, a full-stack JavaScript solution with Node.js for the backend and React for the frontend would be a good fit. For the database, we could use PostgreSQL or MongoDB.
+10. Responsiveness: The website will be built to be responsive and will provide an optimal user experience on desktop, tablet, and mobile devices.
+11. Institution Field: The registration process will include an institution field. This will allow grouping of students and teachers by institution and enable the admin to view progress institution-wise.
+Now that we have a more detailed understanding of your requirements, we can proceed with the design and development of the system. Please confirm if you agree with the above implementation strategy, or if there are any additional features you would like to discuss.
+
+
+Understanding of UI:
+Absolutely! A good user interface design can greatly enhance the user experience. We'll aim for a clean, intuitive, and aesthetically pleasing design that reflects the educational nature of your platform.
+Here are a few design considerations:
+	• 		Theming: We will follow a cohesive theme throughout the website, with quiz or book-related background images, icons, and other visuals to give a professional and education-oriented look and feel.
+	• 		Color Palette: We'll choose a color palette that is visually appealing and consistent with the theme. A combination of neutral colors with some brighter accents often works well for educational platforms.
+	• 		Typography: Readability is crucial for an educational platform. We'll ensure that the fonts, sizes, and line spacing make the content easy to read.
+	• 		Navigation: We'll prioritize clear, intuitive navigation to make it easy for users to find what they need. The main navigation will include links to the most important pages, and a simple menu structure will help users understand where they are on the site.
+	• 		Responsiveness: The design will be responsive, ensuring it looks good and works well on a variety of devices and screen sizes.
+	• 		Accessibility: We'll follow best practices for web accessibility to ensure that all users, including those with disabilities, can use the platform effectively.
+With these design principles in mind, we can create an engaging, user-friendly platform that effectively serves the needs of your students, teachers, and administrators. Please let me know if you have any specific design preferences or requirements, and we can incorporate them into the design process.
+
+
+
+

@@ -1,99 +1,103 @@
-from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
-from flask_cors import CORS
+# main.py
 import os
+import logging
+
+from flask import Flask, request
+from flask_cors import CORS
+from datetime import timedelta
+
+
+# Registering the blueprints after initializing the app
+from routes.user import user as user_router
+from routes.quiz import quiz as quiz_router
+from routes.question import question as question_router
+from routes.result import result as result_router
+
+from flask_jwt_extended import JWTManager
+
+from database import Base, engine
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-    os.path.abspath(os.path.dirname(__file__)), "app.db"
+app.config["JWT_SECRET_KEY"] = "your-secret-key"
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
+jwt = JWTManager(app)
+
+# Apply CORS to app
+# CORS(app, resources={r"*": {"origins": "*"}})
+
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
-app.config[
-    "SECRET_KEY"
-] = "sailikhithk"  # Replace this with a real secret in production!
+logger = logging.getLogger(__name__)
 
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
+# Registering the blueprints
+app.register_blueprint(user_router, url_prefix="/auth")
+app.register_blueprint(quiz_router, url_prefix="/quiz")
+app.register_blueprint(question_router, url_prefix="/question")
+app.register_blueprint(result_router, url_prefix="/result")
 
-
-class Role(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True)
-
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True)
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(80))
-    role_id = db.Column(db.Integer, db.ForeignKey("role.id"))
-
-    role = db.relationship("Role")
-
-
-@app.route("/register", methods=["POST"])
-def register():
-    data = request.get_json()
-    username = data.get("username")
-    email = data.get("email")
-    password = data.get("password")
-    role = data.get("role")
-    print(f"data received:{data}")
-
-    # Check if all fields are provided and if the username isn't already taken
-    if not username or not password or not role:
-        return jsonify({"error": "Missing field(s)"}), 400
-    if User.query.filter_by(username=username).first():
-        return jsonify({"error": "Username taken"}), 400
-    if User.query.filter_by(email=email).first():
-        return jsonify({"error": "Email taken"}), 400
-
-    # Create a new user
-    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
-    user = User(
-        username=username,
-        email=email,
-        password=hashed_password,
-        role=Role.query.filter_by(name=role).first(),
-    )
-    db.session.add(user)
-    db.session.commit()
-
-    return jsonify({"message": "User created"}), 201
-
-
-@app.route("/login", methods=["POST"])
-def login():
-    data = request.get_json()
-    username = data.get("username")
-    password = data.get("password")
-
-    # Validate input
-    if not username or not password:
-        return jsonify({"error": "Missing field(s)"}), 400
-
-    # Check if the user exists and the password is correct
-    user = User.query.filter_by(username=username).first()
-    if not user:
-        return jsonify({"error": "Username not found"}), 401
-    elif not bcrypt.check_password_hash(user.password, password):
-        return jsonify({"error": "Incorrect password"}), 401
-
-    return jsonify({"message": "Logged in"}), 200
-
-
-@app.route("/reset-password", methods=["POST"])
-def reset_password():
-    data = request.get_json()
-    email = data.get("email")
-
-    # Add your logic here to handle password reset
-
-    return jsonify({"message": "Password reset email sent"}), 200
-
+@app.before_request
+def before_request():
+    print()
+    print("Request Received:")
+    print("URL:", request.url)
+    print("Method:", request.method)
+    # print("Headers:", request.headers)
+    print("Query Params:", request.args)
+    
+    if request.method == "POST":
+        if request.content_type.startswith('application/json'):
+            print("Body (JSON):", request.get_json())
+        elif request.content_type.startswith('multipart/form-data'):
+            print("Form Data:")
+            for key, value in request.form.items():
+                print(f"{key}: {value}")    
+    else:
+        print("Body: No request body")
+@app.after_request
+def after_request(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET,POST")
+    
+    print()
+    print("Response Sent:")
+    print("Status Code:", response.status_code)
+    print("Content Type:", response.content_type)
+    
+    if response.content_type == "application/json":
+        print("Data:", response.get_json())
+    elif response.content_type.startswith("image/") or response.content_type.startswith("application/"):
+        print("File Response: Not Printing Binary Data")
+    else:
+        print("Data:", response.get_data(as_text=True))    
+    return response
 
 if __name__ == "__main__":
+    from models.question_model import Question
+    from models.quiz_model import Quiz
+    from models.result_model import Result
+    from models.role_model import Role
+    from models.user_model import User
+
+    Base.metadata.create_all(engine)
+
+    from create_db import (
+        create_dummy_roles,
+        create_dummy_questions,
+        create_dummy_quizzes,
+        create_dummy_results,
+        create_dummy_users,
+    )
+
+    create_dummy_roles()
+    # create_dummy_users()
+    
+    # create_dummy_quizzes()
+    # create_dummy_questions()
+    # create_dummy_results()
+
     app.run(debug=True)
