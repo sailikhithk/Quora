@@ -51,8 +51,8 @@ class UserService:
                 "role_id": user.role_id,
                 "user_id": user.id,
             }
-            access_token = create_access_token(identity=user_data)
-            return {"access_token": access_token}
+            # access_token = create_access_token(identity=user_data)
+            return user_data
         else:
             print("db_password", db_password)
             print("password", password)
