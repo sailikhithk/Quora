@@ -5,3 +5,4 @@ flask_mail
 flask
 flask_sqlalchemy
 twine
+pandas
