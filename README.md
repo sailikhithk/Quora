@@ -1,60 +1,137 @@
 # Quora
 
-Quiz App
+### Table of Contents
 
-# Quora Quiz Project
+1. [Introduction](#introduction)
+2. [Backend Implementation](#backend-implementation)
+   1. [Authentication and User Management](#authentication-and-user-management)
+   2. [Quiz Management](#quiz-management)
+   3. [Database Models](#database-models)
+3. [Frontend Implementation](#frontend-implementation)
+   1. [Dashboard](#dashboard)
+   2. [User Authentication](#user-authentication)
+4. [Local Environment Setup](#local-environment-setup)
+5. [Deployment and Hosting](#deployment-and-hosting)
+6. [Conclusion](#conclusion)
 
-This project is a simple quiz application. The backend is built with Flask, and the frontend is built with React.
+### Introduction
 
-## Project Structure
+The Quiz Platform is a web application that allows students to take quizzes, teachers to manage quizzes, and admins to oversee the entire system. It consists of a React frontend and a Flask backend.
 
-Here is a brief explanation of the project structure:
+### Backend Implementation
 
-<pre grepper_trigger_added="1"><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>yaml</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-yaml">.
-├── LICENSE: The license for this project.
-├── README.md: This file, containing information about this project.
-├── build: Contains files related to building the application.
-├── dist: Contains distribution files.
-├── features.txt: A file listing the features of this application.
-├── frontend: Contains all frontend-related files, written in React.
-│   ├── public: Static files for the frontend.
-│   ├── src: Source files for the frontend.
-│   │   ├── components: React components for the application.
-│   │   ├── services: Services to interact with the backend.
-│   │   └── assets: Static assets like images.
-├── quora.egg-info: Metadata about this Python package.
-├── server: Contains all backend-related files, written in Flask.
-│   ├── models: Database models for SQLAlchemy.
-│   ├── routes: Routes for the Flask application.
-│   ├── services: Services to interact with the database and perform business logic.
-│   ├── database.py: Configuration for the SQLAlchemy database.
-│   ├── app.py: The main entry point for the Flask application.
-│   ├── create_db.py: Script to create and seed the database.
-│   ├── utils.py: Utility functions for the backend.
-│   └── requirements.txt: Python dependencies for the backend.
-└── setup.py: Python package setup file.
-</code></div></div><div class="open_grepper_editor gpt_grepper_add_answer_trigger" title="Edit & Save To Grepper">Save to grepper</div></pre>
+#### Authentication and User Management
 
-## Frontend
+The backend server provides endpoints for user registration, login, password reset, and admin user creation.
 
-The frontend of this application is built with React. It contains several pages and components, including pages for taking a quiz, viewing results, and a user dashboard. The frontend communicates with the backend through an API.
+1. **Login**:
 
-## Backend
+   - **Endpoint**: `/login`
+   - **Method**: `POST`
+   - **Parameters**: `username`, `password`
+   - **Description**: Authenticates the user and returns an access token.
 
-The backend of this application is built with Flask, a Python web framework. It uses SQLAlchemy to interact with a SQLite database. The backend provides a RESTful API for the frontend to interact with.
+2. **Register**:
 
-## Database
+   - **Endpoint**: `/register`
+   - **Method**: `POST`
+   - **Parameters**: `username`, `password`, `email`, etc.
+   - **Description**: Registers a new user.
 
-The database consists of several tables, including `User`, `Role`, `Quiz`, `Question`, and `Result`. These tables store information about users, their roles, quizzes, questions in quizzes, and users' results, respectively.
+3. **Create User (Admin)**:
 
-## Running the Project
+   - **Endpoint**: `/create_user`
+   - **Method**: `POST`
+   - **Parameters**: `username`, `password`, `role`, etc.
+   - **Description**: Admin endpoint to create a new user (e.g., teacher).
 
-To run this project locally, you'll need to have Python and Node.js installed. Then, you can install the necessary dependencies with `pip` and `npm`, respectively.
+4. **Reset Password**:
 
-For the backend, you can start the server by running `python app.py` from the `server` directory.
+   - **Endpoint**: `/reset_password`
+   - **Method**: `POST`
+   - **Parameters**: `email`
+   - **Description**: Initiates a password reset process for a user.
 
-For the frontend, you can start the React development server by running `npm start` from the `frontend` directory.
+#### Quiz Management
 
-## License
+The backend server provides various endpoints related to quizzes, including listing quizzes, uploading quizzes, downloading quizzes, getting specific quiz details, and deleting quizzes.
 
-This project is licensed under the MIT License.
+1. **List All Quizzes**:
+
+   - **Endpoint**: `/<int:user_id>/list`
+   - **Method**: `GET`
+   - **Description**: Returns a list of all quizzes for a specific user.
+
+2. **Upload Quiz**:
+
+   - **Endpoint**: `/upsert_quiz`
+   - **Method**: `POST`
+   - **Parameters**: `file` (optional), `user_id`, `quiz_id` (optional)
+   - **Description**: Allows uploading a quiz via a file or JSON data.
+
+3. **Download Quiz**:
+
+   - **Endpoint**: `/<int:quiz_id>/download_quiz`
+   - **Method**: `GET`
+   - **Description**: Downloads the quiz as an Excel file.
+
+4. **Get Quiz**:
+
+   - **Endpoint**: `/<int:quiz_id>/questions`
+   - **Method**: `GET`
+   - **Description**: Retrieves details of a specific quiz.
+
+5. **Delete Quiz**:
+
+   - **Endpoint**: `/<int:quiz_id>/delete_quiz`
+   - **Method**: `GET`
+   - **Description**: Deletes a specific quiz.
+
+#### Database Models
+
+The backend includes several database models such as `Question`, `Quiz`, `Result`, `Role`, `User`, and `UserQuizMapping`. Could you please provide the code for these models to help us document them in detail?
+
+### Frontend Implementation
+
+#### Dashboard
+
+The Dashboard component in React serves as the main view for students to see available quizzes. It fetches quizzes from the backend and displays them in styled cards.
+
+Key Features:
+
+- **Logout Button**: Allows users to log out of their accounts.
+- **Quiz Cards**: Display quizzes with title, category, and progress bar.
+- **Error Handling**: Shows an error message if an error occurs while fetching quizzes.
+
+#### User Authentication
+
+The frontend includes components for user authentication, including `Login.js`, `Register.js`, and `ResetPassword.js`.
+
+### Local Environment Setup
+
+To set up the application locally, please follow these steps:
+
+1. **Backend Setup**:
+
+   - Clone the repository.
+   - Navigate to the server directory.
+   - Install dependencies with `pip install -r requirements.txt`.
+   - Start the server with `python app.py`.
+
+2. **Frontend Setup**:
+
+   - Navigate to the frontend directory.
+   - Install dependencies with `npm install`.
+   - Start the server with `npm start`.
+
+The application should now be accessible at `http://localhost:3000`.
+
+### Deployment and Hosting
+
+The application can be hosted on public hosting platforms like Digital Ocean. Detailed deployment scripts and configurations would be needed to document this section further.
+
+### Conclusion
+
+The Quiz Platform offers a comprehensive solution for online quiz management, catering to students, teachers, and administrators. The technical architecture encompasses a robust backend API built with Flask and a dynamic frontend built with React.
+
+Please provide additional code snippets or files related to database models, deployment configurations, or any other specific areas you'd like us to cover in the technical documentation.

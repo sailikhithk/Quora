@@ -18,16 +18,6 @@ question_service_obj = QuestionService()
 quiz_service_obj = QuizService()
 
 
-# @quiz.route("/<int:user_id>/list", methods=["GET"])
-# def get_all_quizzes(user_id):
-#     try:
-#         quizzes = quiz_service_obj.get_all_quizzes(user_id)
-#         return jsonify(quizzes), 200
-#     except Exception as e:
-#         traceback.print_exc()
-#         return jsonify({"error": str(e)}), 500
-
-
 @quiz.route("/<int:user_id>/list", methods=["GET"])
 def get_all_quizzes(user_id):
     try:
@@ -37,6 +27,7 @@ def get_all_quizzes(user_id):
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
+
 @quiz.route("/upsert_quiz", methods=["POST"])
 # @jwt_required()
 def upload_quiz():
@@ -45,10 +36,10 @@ def upload_quiz():
             # uploading quiz via file
             file = request.files["file"]
             if file.filename == "":
-                return jsonify({"error": "No selected file"}), 500        
-            user_id = request.form.get('user_id')
-            quiz_id = request.form.get("quiz_id", None)            
-            response = quiz_service_obj.upsert_quiz_file(file, user_id, quiz_id)    
+                return jsonify({"error": "No selected file"}), 500
+            user_id = request.form.get("user_id")
+            quiz_id = request.form.get("quiz_id", None)
+            response = quiz_service_obj.upsert_quiz_file(file, user_id, quiz_id)
         else:
             data = request.get_json()
             validate(data, UPLOAD_QUIZ_SCHEMA)
@@ -60,6 +51,7 @@ def upload_quiz():
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
+
 @quiz.route("/<int:quiz_id>/download_quiz", methods=["GET"])
 def download_quiz(quiz_id):
     try:
@@ -67,8 +59,9 @@ def download_quiz(quiz_id):
         return send_file("output.xlsx", as_attachment=True)
     except Exception as e:
         traceback.print_exc()
-        return jsonify({"error": str(e)}), 500    
-    
+        return jsonify({"error": str(e)}), 500
+
+
 @quiz.route("/<int:quiz_id>/questions", methods=["GET"])
 def get_quiz(quiz_id):
     try:
@@ -77,6 +70,7 @@ def get_quiz(quiz_id):
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+
 
 @quiz.route("/<int:quiz_id>/delete_quiz", methods=["GET"])
 def delete_quiz(quiz_id):
