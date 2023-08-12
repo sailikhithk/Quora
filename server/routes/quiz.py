@@ -9,10 +9,8 @@ from jsonschema import validate
 from services import QuestionService, QuizService
 from validation import UPLOAD_QUIZ_SCHEMA
 
-
 quiz = Blueprint("quiz", __name__)
 logger = logging.getLogger("auth")
-
 
 question_service_obj = QuestionService()
 quiz_service_obj = QuizService()
@@ -20,6 +18,13 @@ quiz_service_obj = QuizService()
 
 @quiz.route("/<int:user_id>/list", methods=["GET"])
 def get_all_quizzes(user_id):
+    """
+    Endpoint to fetch all quizzes for a specific user.
+    Sample input URL: /quiz/1/list
+
+    :param user_id: ID of the user
+    :return: JSON object containing quizzes
+    """
     try:
         quizzes = quiz_service_obj.get_all_quizzes(user_id)
         return jsonify(quizzes), 200
@@ -29,8 +34,18 @@ def get_all_quizzes(user_id):
 
 
 @quiz.route("/upsert_quiz", methods=["POST"])
-# @jwt_required()
 def upload_quiz():
+    """
+    Endpoint to upload or update a quiz.
+    Sample input JSON:
+    {
+        "file": file_object,
+        "user_id": 1,
+        "quiz_id": 2
+    }
+
+    :return: JSON object with response message
+    """
     try:
         if "file" in request.files:
             # uploading quiz via file
@@ -43,8 +58,6 @@ def upload_quiz():
         else:
             data = request.get_json()
             validate(data, UPLOAD_QUIZ_SCHEMA)
-            # identity = get_jwt_identity()
-            # user_id = identity["user_id"]
             response = quiz_service_obj.upload_quiz_json(data)
         return jsonify(response)
     except Exception as e:
@@ -54,6 +67,13 @@ def upload_quiz():
 
 @quiz.route("/<int:quiz_id>/download_quiz", methods=["GET"])
 def download_quiz(quiz_id):
+    """
+    Endpoint to download a quiz in Excel format.
+    Sample input URL: /quiz/1/download_quiz
+
+    :param quiz_id: ID of the quiz
+    :return: Excel file for download
+    """
     try:
         quiz_service_obj.download_quiz(quiz_id)
         return send_file("output.xlsx", as_attachment=True)
@@ -64,6 +84,13 @@ def download_quiz(quiz_id):
 
 @quiz.route("/<int:quiz_id>/questions", methods=["GET"])
 def get_quiz(quiz_id):
+    """
+    Endpoint to fetch questions for a specific quiz.
+    Sample input URL: /quiz/1/questions
+
+    :param quiz_id: ID of the quiz
+    :return: JSON object containing questions
+    """
     try:
         response = quiz_service_obj.get_quiz(quiz_id)
         return jsonify(response)
@@ -74,6 +101,13 @@ def get_quiz(quiz_id):
 
 @quiz.route("/<int:quiz_id>/delete_quiz", methods=["GET"])
 def delete_quiz(quiz_id):
+    """
+    Endpoint to delete a specific quiz.
+    Sample input URL: /quiz/1/delete_quiz
+
+    :param quiz_id: ID of the quiz
+    :return: JSON object with response message
+    """
     try:
         response = quiz_service_obj.delete_quiz(quiz_id)
         return jsonify(response)

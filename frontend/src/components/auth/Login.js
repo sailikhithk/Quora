@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import quizImage from "../../assets/quiz-time.webp"; // <-- Add this
+import quizImage from "../../assets/quiz-time.webp";
 
 const StyledButton = styled(Link)`
   display: inline-block;
@@ -101,15 +101,23 @@ function Login({ handleLogin }) {
         username,
         password,
       });
-      localStorage.setItem("token", res.data.access_token); // changed "token" to "access_token"
+
+      console.log("Server response:", res.data); // Print the entire server response
+      console.log("user_id received:", res.data.user_id); // Print the user_id
+
+      // Storing the user details in local storage
+      localStorage.setItem("user_id", res.data.user_id);
+      localStorage.setItem("user_name", res.data.user_name);
+      localStorage.setItem("email", res.data.email);
+
       alert("Login successful!");
       handleLogin();
       navigate("/dashboard");
     } catch (err) {
+      console.log("Login error:", err); // Print the error details
       alert("Login failed");
     }
   };
-
   return (
     <Container>
       <QuizImage src={quizImage} alt="Quiz" />

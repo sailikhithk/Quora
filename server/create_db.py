@@ -9,6 +9,10 @@ import json, random
 
 
 def create_dummy_roles():
+    """
+    Function to create and insert dummy roles in the database.
+    The roles include "Admin", "Teacher", and "Student".
+    """
     roles_data = ["Admin", "Teacher", "Student"]
     query_result = (
         session.query(func.count(Role.id)).filter(Role.name.in_(roles_data)).scalar()
@@ -21,6 +25,10 @@ def create_dummy_roles():
 
 
 def create_dummy_users():
+    """
+    Function to create and insert dummy users in the database.
+    Three users are created, each with a corresponding role and institution.
+    """
     roles = session.query(Role).all()
     institutions = ["Institution 1", "Institution 2", "Institution 3"]
     for i, role in enumerate(roles):
@@ -38,6 +46,10 @@ def create_dummy_users():
 
 
 def create_dummy_quizzes():
+    """
+    Function to create and insert dummy quizzes in the database.
+    Quizzes are created for each user and include pass marks and next quiz to unlock.
+    """
     users = session.query(User).all()
     next_quizzes_to_unlock = [2, 3, 4, 5, 6, 1]
     for i, user in enumerate(users):
@@ -52,6 +64,10 @@ def create_dummy_quizzes():
 
 
 def create_dummy_questions():
+    """
+    Function to create and insert dummy questions in the database.
+    Questions are created for each quiz and include content, options, correct answers, and marks.
+    """
     quizzes = session.query(Quiz).all()
     options_list = ["a", "b", "c", "d"]  # predefined list of options
 
@@ -77,6 +93,10 @@ def create_dummy_questions():
 
 
 def create_dummy_results():
+    """
+    Function to create and insert dummy results in the database.
+    Results are created for each user and include scores, answers, and correctness.
+    """
     users = session.query(User).all()
     quizzes = session.query(Quiz).all()
     for i, user in enumerate(users):
