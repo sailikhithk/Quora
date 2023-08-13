@@ -38,6 +38,7 @@
 │       │   ├── Homepage.js
 │       │   ├── Navbar.css
 │       │   ├── Navbar.js
+│       │   ├── Profile.js
 │       │   ├── Question.js
 │       │   ├── Quiz.js
 │       │   ├── QuizList.js
@@ -71,6 +72,7 @@
 │   ├── database.py
 │   ├── models
 │   │   ├── __init__.py
+│   │   ├── profile_model.py
 │   │   ├── question_model.py
 │   │   ├── quiz_model.py
 │   │   ├── result_model.py
@@ -80,12 +82,14 @@
 │   ├── requirements.txt
 │   ├── routes
 │   │   ├── __init__.py
+│   │   ├── profile.py
 │   │   ├── question.py
 │   │   ├── quiz.py
 │   │   ├── result.py
 │   │   └── user.py
 │   ├── services
 │   │   ├── __init__.py
+│   │   ├── profile_service.py
 │   │   ├── question_service.py
 │   │   ├── quiz_service.py
 │   │   ├── result_service.py
@@ -96,4 +100,4 @@
 ├── setup.py
 └── tree.txt
 
-17 directories, 80 files
+17 directories, 84 files
