@@ -6,10 +6,8 @@ import {
   BiBookOpen,
   BiUserCircle,
   BiCog,
-  BiDotsVerticalRounded,
-  BiLineChart, // This is just a placeholder. Please replace this with a suitable icon.
+  BiLogOut,
 } from "react-icons/bi";
-import { BiLogOutCircle } from "react-icons/bi";
 
 const StyledNavbar = styled.nav`
   display: flex;
@@ -37,47 +35,33 @@ const StyledLink = styled(Link)`
   }
 `;
 
-function Navbar({ authenticated, handleLogout }) {
-  console.log(authenticated);
+function Navbar({ handleLogout }) {
   return (
     <StyledNavbar>
       <StyledLink to="/">
         <BiHomeAlt size={30} />
         Home
       </StyledLink>
-      {authenticated ? (
-        <>
-          <StyledLink to="/dashboard">
-            <BiDotsVerticalRounded size={30} />
-            Dashboard
-          </StyledLink>
-          <StyledLink to="/quiz">
-            <BiBookOpen size={30} />
-            Quiz
-          </StyledLink>
-          <StyledLink to="/profile">
-            <BiUserCircle size={30} />
-            Profile
-          </StyledLink>
-          <StyledLink to="/settings">
-            <BiCog size={30} />
-            Settings
-          </StyledLink>
-          <StyledLink to="/reports">
-            <BiLineChart size={30} />
-            Reports
-          </StyledLink>
-          <StyledLink to="/logout" onClick={handleLogout}>
-            <BiLogOutCircle size={30} />
-            Logout
-          </StyledLink>
-        </>
-      ) : (
-        <>
-          <StyledLink to="/login">Login</StyledLink>
-          <StyledLink to="/register">Register</StyledLink>
-        </>
-      )}
+      <StyledLink to="/dashboard">
+        <BiHomeAlt size={30} />
+        Dashboard
+      </StyledLink>
+      <StyledLink to="/quiz">
+        <BiBookOpen size={30} />
+        Quiz
+      </StyledLink>
+      <StyledLink to="/profile">
+        <BiUserCircle size={30} />
+        Profile
+      </StyledLink>
+      <StyledLink to="/settings">
+        <BiCog size={30} />
+        Settings
+      </StyledLink>
+      <StyledLink to="/" onClick={handleLogout}>
+        <BiLogOut size={30} />
+        Logout
+      </StyledLink>
     </StyledNavbar>
   );
 }

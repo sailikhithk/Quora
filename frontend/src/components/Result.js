@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
 import apiService from "../services/apiService";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import styled from "styled-components";
 
 const ResultContainer = styled.div`
   padding: 20px;
+  margin-left: 100px; // Added to offset the navbar
 `;
 
 const QuestionContainer = styled.div`
@@ -23,9 +24,24 @@ const Option = styled.div`
     props.isCorrect ? "#0a0" : props.isSelected ? "#f00" : "#fff"};
 `;
 
+const DashboardButton = styled.button`
+  padding: 0.5rem;
+  margin-top: 1rem;
+  background-color: #0a0;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: #0c0;
+  }
+`;
+
 const Result = () => {
   const [result, setResult] = useState(null);
   const { id } = useParams();
+  const navigate = useNavigate(); // Define navigate function
 
   const fetchResult = useCallback(async () => {
     try {
@@ -62,6 +78,10 @@ const Result = () => {
               <p>Score Allocated: {answer.score_allocated}</p>
             </QuestionContainer>
           ))}
+          <DashboardButton onClick={() => navigate("/dashboard")}>
+            Go back to Dashboard
+          </DashboardButton>{" "}
+          {/* Added Dashboard Button */}
         </div>
       ) : (
         "Loading..."
