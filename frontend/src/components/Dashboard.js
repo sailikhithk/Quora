@@ -3,6 +3,13 @@ import { Link } from "react-router-dom";
 import apiService from "../services/apiService";
 import styled from "styled-components";
 
+const UserDetails = styled.div`
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px;
+`;
+
 const LogoutButton = styled.button`
   color: white;
   background-color: red;
@@ -62,35 +69,42 @@ const Progress = styled.div`
   }
 `;
 
+const DashboardTitle = styled.h2`
+  padding-left: 10%;
+`;
+
 const Dashboard = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchQuizzes();
-  }, []);
+  const user_id = localStorage.getItem("user_id"); // Retrieve the user_id from localStorage
+  const user_name = localStorage.getItem("user_name"); // Retrieve the username from localStorage
+  const email = localStorage.getItem("email"); // Retrieve the email from localStorage
 
-  const fetchQuizzes = async () => {
-    try {
-      const response = await apiService.get("quiz/list");
-      setQuizzes(response.data);
-      console.log(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-      setError(error.message || "An error occurred");
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      try {
+        const response = await apiService.get(`quiz/${user_id}/list`); // Include the user_id in the route
+        console.log(response.data); // Log the response data to inspect
+        setQuizzes(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setError(error.message || "An error occurred");
+        setLoading(false);
+      }
+    };
+
+    fetchQuizzes();
+  }, [user_id]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("user_id"); // Add this line
+    localStorage.removeItem("user_name");
+    localStorage.removeItem("email");
     window.location.reload();
   };
-  const DashboardTitle = styled.h2`
-    padding-left: 10%; // Adjust the value to your needs
-  `;
 
   if (loading) {
     return <div>Loading...</div>;
@@ -103,11 +117,15 @@ const Dashboard = () => {
   return (
     <div>
       <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+      <UserDetails>
+        <p>Username: {user_name}</p>
+        <p>Email: {email}</p>
+      </UserDetails>
       <DashboardTitle>Dashboard</DashboardTitle>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {quizzes.map((quiz) => (
           <QuizCard key={quiz.id}>
-            <Link to={`/quiz/${quiz.id}`}>
+            <Link to={`/quiz/${quiz.quiz_id}/questions`}>
               <QuizImage src={quiz.image} alt="Quiz" />
               <QuizTitle>{quiz.title}</QuizTitle>
               <QuizCategory>Category: {quiz.category}</QuizCategory>

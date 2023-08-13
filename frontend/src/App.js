@@ -153,6 +153,18 @@ const App = () => {
           }
         />
         <Route
+          path="/quiz/:id/questions"
+          element={
+            <>
+              <Navbar
+                authenticated={authenticated}
+                handleLogout={handleLogout}
+              />
+              <Quiz />
+            </>
+          }
+        />
+        <Route
           path="/quiz/:id"
           element={
             <>
@@ -165,7 +177,7 @@ const App = () => {
           }
         />
         <Route
-          path="/result"
+          path="/result/:id"
           element={
             <>
               <Navbar
