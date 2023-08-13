@@ -83,20 +83,21 @@ const Dashboard = () => {
   const email = localStorage.getItem("email"); // Retrieve the email from localStorage
 
   useEffect(() => {
-    fetchQuizzes();
-  }, []);
+    const fetchQuizzes = async () => {
+      try {
+        const response = await apiService.get(`quiz/${user_id}/list`); // Include the user_id in the route
+        console.log(response.data); // Log the response data to inspect
+        setQuizzes(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setError(error.message || "An error occurred");
+        setLoading(false);
+      }
+    };
 
-  const fetchQuizzes = async () => {
-    try {
-      const response = await apiService.get(`quiz/${user_id}/list`); // Include the user_id in the route
-      setQuizzes(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-      setError(error.message || "An error occurred");
-      setLoading(false);
-    }
-  };
+    fetchQuizzes();
+  }, [user_id]);
 
   const handleLogout = () => {
     localStorage.removeItem("user_id"); // Add this line
@@ -117,15 +118,14 @@ const Dashboard = () => {
     <div>
       <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
       <UserDetails>
-        <p>Username: {user_name}</p> {/* Use the user_name variable */}
-        <p>Email: {email}</p> {/* Use the email variable */}
-        {/* Include other user details as needed */}
+        <p>Username: {user_name}</p>
+        <p>Email: {email}</p>
       </UserDetails>
       <DashboardTitle>Dashboard</DashboardTitle>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {quizzes.map((quiz) => (
           <QuizCard key={quiz.id}>
-            <Link to={`/quiz/${quiz.id}`}>
+            <Link to={`/quiz/${quiz.quiz_id}/questions`}>
               <QuizImage src={quiz.image} alt="Quiz" />
               <QuizTitle>{quiz.title}</QuizTitle>
               <QuizCategory>Category: {quiz.category}</QuizCategory>
