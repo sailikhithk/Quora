@@ -3,21 +3,19 @@ from models.user_model import User
 from models.quiz_model import Quiz
 from models.question_model import Question
 from models.result_model import Result
+from models.profile_model import Profile
+
 from database import session
 from sqlalchemy import func
 import json, random
 
 
 def create_dummy_roles():
-    """
-    Function to create and insert dummy roles in the database.
-    The roles include "Admin", "Teacher", and "Student".
-    """
-    roles_data = ["Admin", "Teacher", "Student"]
+    roles_data = ["Admin", "Teacher", "Student", "SAI"]
     query_result = (
         session.query(func.count(Role.id)).filter(Role.name.in_(roles_data)).scalar()
     )
-    if query_result != 3:
+    if query_result != len(roles_data):
         for role_name in roles_data:
             role = Role(name=role_name)
             session.add(role)
@@ -25,31 +23,38 @@ def create_dummy_roles():
 
 
 def create_dummy_users():
-    """
-    Function to create and insert dummy users in the database.
-    Three users are created, each with a corresponding role and institution.
-    """
     roles = session.query(Role).all()
-    institutions = ["Institution 1", "Institution 2", "Institution 3"]
-    for i, role in enumerate(roles):
-        existing_user = session.query(User).filter_by(username=f"user{i+1}").first()
+    institutions = ["Institution 1", "Institution 2", "Institution 3", "SAI"]
+    users_data = [
+        {
+            "username": "Harnath-1",
+            "password": "harnath",
+            "email": "harnath@gmail.com",
+            "institution": "SAI",
+            "role": "Admin",
+        },
+        # Add other users as needed
+    ]
+    for user_data in users_data:
+        existing_user = (
+            session.query(User).filter_by(username=user_data["username"]).first()
+        )
         if not existing_user:
+            role_id = next(
+                (role.id for role in roles if role.name == user_data["role"]), None
+            )
             user = User(
-                username=f"user{i+1}",
-                password_hash=f"password{i+1}",
-                email=f"user{i+1}@example.com",
-                institution=institutions[i % len(institutions)],
-                role_id=role.id,
+                username=user_data["username"],
+                password_hash=user_data["password"],
+                email=user_data["email"],
+                institution=user_data["institution"],
+                role_id=role_id,
             )
             session.add(user)
     session.commit()
 
 
 def create_dummy_quizzes():
-    """
-    Function to create and insert dummy quizzes in the database.
-    Quizzes are created for each user and include pass marks and next quiz to unlock.
-    """
     users = session.query(User).all()
     next_quizzes_to_unlock = [2, 3, 4, 5, 6, 1]
     for i, user in enumerate(users):
@@ -64,65 +69,39 @@ def create_dummy_quizzes():
 
 
 def create_dummy_questions():
-    """
-    Function to create and insert dummy questions in the database.
-    Questions are created for each quiz and include content, options, correct answers, and marks.
-    """
     quizzes = session.query(Quiz).all()
-    options_list = ["a", "b", "c", "d"]  # predefined list of options
-
+    options_list = ["a", "b", "c", "d"]
     for i, quiz in enumerate(quizzes):
-        question_content = {
-            "question": f"Q{i+1}",  # generate question text
-            "is_multichoice": False
-            if i % 2 == 0
-            else True,  # alternate between True and False
-            "options": options_list,
-            "correct_option": [0]
-            if i % 2 == 0
-            else [0, 1],  # alternate between single and multiple correct options
-            "is_mandatory": True,
-            "marks": 5,  # or any value that suits your scoring system
-        }
-        question = Question(
-            content=question_content,  # No need to convert to string or replace ' with "
-            quiz_id=quiz.id,
-        )
-        session.add(question)
+        for j in range(2):  # Creating 2 questions for each quiz
+            is_multichoice = random.choice([True, False])
+            question = Question(
+                content=f"Q{j+1}",
+                is_multichoice=is_multichoice,
+                options=json.dumps(options_list),
+                correct_option=json.dumps([1, 2] if is_multichoice else [1]),
+                is_mandatory=True,
+                marks=5 if is_multichoice else 1,
+                quiz_id=quiz.id,
+            )
+            session.add(question)
     session.commit()
 
 
 def create_dummy_results():
-    """
-    Function to create and insert dummy results in the database.
-    Results are created for each user and include scores, answers, and correctness.
-    """
     users = session.query(User).all()
     quizzes = session.query(Quiz).all()
-    for i, user in enumerate(users):
-        if i < len(quizzes):
-            answers = [
-                {
-                    "question_id": question.id,
-                    "selected_options": [3, 4],
-                    "is_correct": False,
-                    "score_allocated": 0,
-                }
-                if question.content["is_multichoice"]
-                else {
-                    "question_id": question.id,
-                    "selected_options": [1],
-                    "is_correct": True,
-                    "score_allocated": question.content["marks"],
-                }
-                for question in quizzes[i].questions
-            ]
+    for user in users:
+        for quiz in quizzes:
             result = Result(
-                score=80.0,
-                quiz_id=quizzes[i].id,
                 user_id=user.id,
-                answers=answers,
+                quiz_id=quiz.id,
+                content=json.dumps(
+                    [
+                        {"question_id": 1, "selected_options": [0]},
+                        {"question_id": 2, "selected_options": [2]},
+                    ]
+                ),
+                # Other attributes as needed
             )
             session.add(result)
     session.commit()
-    print("Dummy data created successfully!")

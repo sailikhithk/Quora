@@ -13,6 +13,7 @@ import Dashboard from "./components/Dashboard";
 import Quiz from "./components/Quiz";
 import QuizList from "./components/QuizList";
 import Result from "./components/Result";
+import Profile from "./components/Profile";
 import styled from "styled-components";
 
 const api = axios.create({
@@ -194,6 +195,18 @@ const App = () => {
               <MainContent>
                 <Result />
               </MainContent>
+            </>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <>
+              <Navbar
+                authenticated={authenticated}
+                handleLogout={handleLogout}
+              />
+              <Profile />
             </>
           }
         />

@@ -11,6 +11,7 @@ from routes.user import user as user_router
 from routes.quiz import quiz as quiz_router
 from routes.question import question as question_router
 from routes.result import result as result_router
+from routes.profile import profile as profile_router
 
 from flask_jwt_extended import JWTManager
 
@@ -39,6 +40,7 @@ app.register_blueprint(user_router, url_prefix="/auth")
 app.register_blueprint(quiz_router, url_prefix="/quiz")
 app.register_blueprint(question_router, url_prefix="/question")
 app.register_blueprint(result_router, url_prefix="/result")
+app.register_blueprint(profile_router, url_prefix="/profile")
 
 
 # Function to log request details before processing
@@ -89,6 +91,7 @@ if __name__ == "__main__":
     from models.result_model import Result
     from models.role_model import Role
     from models.user_model import User
+    from models.profile_model import Profile
 
     Base.metadata.create_all(engine)
 
@@ -99,6 +102,7 @@ if __name__ == "__main__":
         # create_dummy_quizzes,
         # create_dummy_questions,
         # create_dummy_results,
+        # create_dummy_profiles,
     )
 
     create_dummy_roles()

@@ -3,14 +3,15 @@ import apiService from "../services/apiService";
 import styled from "styled-components";
 
 const DashboardContainer = styled.div`
-  padding-left: 10%; // Added padding to offset the Navbar
+  padding-left: 10%; // Padding to offset the Navbar
   padding-top: 20px;
+  width: 90%;
 `;
 
 const QuizSummary = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  overflow-x: scroll; // Enables horizontal scrolling
+  white-space: nowrap; // Prevents wrapping to the next line
 `;
 
 const QuizCard = styled.div`
@@ -18,7 +19,8 @@ const QuizCard = styled.div`
   border-radius: 4px;
   padding: 15px;
   margin: 10px;
-  width: 30%;
+  width: 300px; // Fixed width for uniform size
+  display: inline-block; // Inline display to place cards beside each other
   transition: 0.3s;
   &:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
