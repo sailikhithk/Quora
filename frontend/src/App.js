@@ -13,6 +13,7 @@ import Dashboard from "./components/Dashboard";
 import Quiz from "./components/Quiz";
 import QuizList from "./components/QuizList";
 import Result from "./components/Result";
+import styled from "styled-components";
 
 const api = axios.create({
   baseURL: "http://localhost:5000",
@@ -31,11 +32,17 @@ const GlobalStyle = createGlobalStyle`
     background-color: #000; 
     color: #fff; 
     font-family: 'Poppins', sans-serif;
+    overflow: auto; // Add this to allow scrolling
   }
 
   a {
     color: #fff; 
   }
+`;
+
+const MainContent = styled.div`
+  margin-left: 80px; // Adjust this to match the navbar width
+  padding: 1rem;
 `;
 
 const App = () => {
@@ -184,7 +191,9 @@ const App = () => {
                 authenticated={authenticated}
                 handleLogout={handleLogout}
               />
-              <Result />
+              <MainContent>
+                <Result />
+              </MainContent>
             </>
           }
         />

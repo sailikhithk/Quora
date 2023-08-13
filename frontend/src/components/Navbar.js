@@ -9,6 +9,7 @@ import {
   BiDotsVerticalRounded,
   BiLineChart, // This is just a placeholder. Please replace this with a suitable icon.
 } from "react-icons/bi";
+import { BiLogOutCircle } from "react-icons/bi";
 
 const StyledNavbar = styled.nav`
   display: flex;
@@ -67,6 +68,7 @@ function Navbar({ authenticated, handleLogout }) {
             Reports
           </StyledLink>
           <StyledLink to="/logout" onClick={handleLogout}>
+            <BiLogOutCircle size={30} />
             Logout
           </StyledLink>
         </>

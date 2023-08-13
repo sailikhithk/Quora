@@ -1,47 +1,72 @@
 import React, { useEffect, useState, useCallback } from "react";
 import apiService from "../services/apiService";
-import { useParams } from "react-router-dom"; // Import useParams
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
+
+const ResultContainer = styled.div`
+  padding: 20px;
+`;
+
+const QuestionContainer = styled.div`
+  background-color: #444;
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const Option = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 5px;
+  color: ${(props) =>
+    props.isCorrect ? "#0a0" : props.isSelected ? "#f00" : "#fff"};
+`;
 
 const Result = () => {
   const [result, setResult] = useState(null);
-  const { id } = useParams(); // Use useParams to get the id
+  const { id } = useParams();
 
-  // Added useCallback
   const fetchResult = useCallback(async () => {
     try {
-      // Update the URL to match the correct endpoint
       const response = await apiService.get(`/result/${id}/get_result`);
       setResult(response.data);
     } catch (error) {
       console.error(error);
     }
-  }, [id]); // Dependency array for useCallback
+  }, [id]);
 
   useEffect(() => {
     fetchResult();
-  }, [fetchResult]); // Updated dependency array
+  }, [fetchResult]);
 
   return (
-    <div>
+    <ResultContainer>
       <h2>Result</h2>
       {result ? (
         <div>
           <h3>Your score: {result.score}</h3>
-          {/* Display additional result details here */}
           {result.answers.map((answer, index) => (
-            <div key={index}>
+            <QuestionContainer key={index}>
               <p>Question ID: {answer.question_id}</p>
-              <p>Correct Options: {answer.correct_options.join(", ")}</p>
-              <p>Your Selection: {answer.selected_options.join(", ")}</p>
+              {answer.correct_options.map((option, idx) => (
+                <Option
+                  key={idx}
+                  isCorrect={answer.correct_options.includes(idx)}
+                  isSelected={answer.selected_options.includes(idx)}
+                >
+                  Option {option}: {answer.is_correct ? "✓" : "✗"}
+                </Option>
+              ))}
               <p>Is Correct: {answer.is_correct ? "Yes" : "No"}</p>
               <p>Score Allocated: {answer.score_allocated}</p>
-            </div>
+            </QuestionContainer>
           ))}
         </div>
       ) : (
         "Loading..."
       )}
-    </div>
+    </ResultContainer>
   );
 };
 
