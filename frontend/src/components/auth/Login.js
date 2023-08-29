@@ -102,22 +102,21 @@ function Login({ handleLogin }) {
         password,
       });
 
-      console.log("Server response:", res.data); // Print the entire server response
-      console.log("user_id received:", res.data.user_id); // Print the user_id
+      console.log("Server response:", res.data); // Debugging
+      console.log("user_id received:", res.data.user_id); // Debugging
 
-      // Storing the user details in local storage
       localStorage.setItem("user_id", res.data.user_id);
-      localStorage.setItem("user_name", res.data.user_name);
-      localStorage.setItem("email", res.data.email);
+      console.log("Stored user_id in local storage: ", localStorage.getItem("user_id")); // Debugging
 
       alert("Login successful!");
       handleLogin();
       navigate("/dashboard");
     } catch (err) {
-      console.log("Login error:", err); // Print the error details
+      console.log("Login error:", err); // Debugging
       alert("Login failed");
     }
   };
+
   return (
     <Container>
       <QuizImage src={quizImage} alt="Quiz" />

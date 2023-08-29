@@ -2,7 +2,7 @@
 FROM python:3.9-slim
 
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /server
 
 # Copy the backend code into the container
 COPY server/ ./

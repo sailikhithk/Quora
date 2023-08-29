@@ -53,6 +53,7 @@ const DashboardButton = styled.button`
 const Dashboard = () => {
   const [quizzes, setQuizzes] = useState([]);
   const user_id = localStorage.getItem("user_id");
+  console.log(user_id);
 
   useEffect(() => {
     const fetchQuizzes = async () => {

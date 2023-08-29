@@ -77,6 +77,7 @@ def after_request(response):
     elif response.content_type.startswith("image/") or response.content_type.startswith(
         "application/"
     ):
+        
         print("File Response: Not Printing Binary Data")
     else:
         print("Data:", response.get_data(as_text=True))

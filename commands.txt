@@ -1,2 +1,3 @@
-tree -I 'node_modules|venv|__pycache__' > tree.txt
-sudo /Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron
+Purpose: 
+Tree structure of our project to view all files at once: tree -I 'node_modules|venv|__pycache__' > tree.txt 
+Open VS Code in admin mode: sudo /Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron

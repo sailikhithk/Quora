@@ -2,7 +2,7 @@
 FROM node:16
 
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /frontend
 
 # Copy the package.json and package-lock.json first to leverage Docker cache
 COPY frontend/package*.json ./
@@ -13,11 +13,5 @@ RUN npm install
 # Copy the rest of the frontend code into the container
 COPY frontend/ ./
 
-# Build the React app
-RUN npm run build
-
-# Install serve to serve the static files
-RUN npm install -g serve
-
-# Start the app
-CMD ["serve", "-s", "build"]
+# Start the React development server
+CMD ["npm", "start"]
