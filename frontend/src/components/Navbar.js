@@ -12,11 +12,9 @@ import {
 const StyledNavbar = styled.nav`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  background-color: #000;
-  color: white;
+  background-color: #fff;
   padding: 1rem;
-  width: 80px;
+  width: 150px;
   height: 100vh;
   position: fixed;
 `;
@@ -25,7 +23,7 @@ const StyledLink = styled(Link)`
   color: white;
   text-decoration: none;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   padding: 0.5rem 0;
   transition: color 0.3s ease;
@@ -38,30 +36,44 @@ const StyledLink = styled(Link)`
 function Navbar({ handleLogout }) {
   return (
     <StyledNavbar>
-      <StyledLink to="/">
-        <BiHomeAlt size={30} />
-        Home
-      </StyledLink>
-      <StyledLink to="/dashboard">
-        <BiHomeAlt size={30} />
-        Dashboard
-      </StyledLink>
-      <StyledLink to="/quiz">
-        <BiBookOpen size={30} />
-        Quiz
-      </StyledLink>
-      <StyledLink to="/profile">
-        <BiUserCircle size={30} />
-        Profile
-      </StyledLink>
-      <StyledLink to="/settings">
-        <BiCog size={30} />
-        Settings
-      </StyledLink>
-      <StyledLink to="/" onClick={handleLogout}>
-        <BiLogOut size={30} />
-        Logout
-      </StyledLink>
+      <div style={{ padding: "20px" }}>
+        <StyledLink to="/">
+          <BiHomeAlt size={25} color={"#78829D"} />
+          <span style={{ marginLeft: "10px", color: "#78829D" }}>Home</span>
+        </StyledLink>
+      </div>
+      <div style={{ padding: "20px" }}>
+        <StyledLink to="/dashboard">
+          <BiHomeAlt size={25} color={"#78829D"} />
+          <span style={{ marginLeft: "10px", color: "#78829D" }}>
+            Dashboard
+          </span>
+        </StyledLink>
+      </div>
+      <div style={{ padding: "20px" }}>
+        <StyledLink to="/quiz">
+          <BiBookOpen size={25} color={"#78829D"} />
+          <span style={{ marginLeft: "10px", color: "#78829D" }}>Quiz</span>
+        </StyledLink>
+      </div>
+      <div style={{ padding: "20px" }}>
+        <StyledLink to="/profile">
+          <BiUserCircle size={25} color={"#78829D"} />
+          <span style={{ marginLeft: "10px", color: "#78829D" }}>Profile</span>
+        </StyledLink>
+      </div>
+      <div style={{ padding: "20px" }}>
+        <StyledLink to="/settings">
+          <BiCog size={25} color={"#78829D"} />
+          <span style={{ marginLeft: "10px", color: "#78829D" }}>Settings</span>
+        </StyledLink>
+      </div>
+      <div style={{ padding: "20px" }}>
+        <StyledLink to="/" onClick={handleLogout}>
+          <BiLogOut size={25} color={"#78829D"} />
+          <span style={{ marginLeft: "10px", color: "#78829D" }}>Logout</span>
+        </StyledLink>
+      </div>
     </StyledNavbar>
   );
 }
