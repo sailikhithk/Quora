@@ -8,3 +8,4 @@ twine
 pandas
 jsonschema
 cryptography
+openpyxl

@@ -12,6 +12,7 @@ from routes.quiz import quiz as quiz_router
 from routes.question import question as question_router
 from routes.result import result as result_router
 from routes.profile import profile as profile_router
+from routes.lesson import lesson as lesson_router
 
 from flask_jwt_extended import JWTManager
 
@@ -41,6 +42,7 @@ app.register_blueprint(quiz_router, url_prefix="/quiz")
 app.register_blueprint(question_router, url_prefix="/question")
 app.register_blueprint(result_router, url_prefix="/result")
 app.register_blueprint(profile_router, url_prefix="/profile")
+app.register_blueprint(lesson_router, url_prefix="/lesson")
 
 
 # Function to log request details before processing

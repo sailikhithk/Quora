@@ -12,6 +12,3 @@ class Role(Base):
     name = Column(String(64), unique=True)  # The role name e.g. "admin", "student"
     created_date = Column(DateTime, default=func.now(), nullable=False)
     updated_date = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
-
-    # Relationships
-    users = relationship("User", backref="role", lazy="dynamic")

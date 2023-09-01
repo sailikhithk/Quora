@@ -124,6 +124,24 @@ SUBMIT_ANSWER_SCHEMA = {
   "required": ["quiz_id", "content"]
 }
 
+CREATE_LESSON_SCHEMA = {
+  "type": "object",
+  "properties": {
+    "title": {"type": "string"},
+    "author_id": {"type": "integer"},
+    "file_path": {"type": "string"},
+    "quiz_id": {"type": "integer"},
+  },
+  "required": ["title", "author_id", "file_path", "quiz_id"]
+}
 
-UPDATE_LESSON_SCHEMA = {}
-CREATE_LESSON_SCHEMA = {}
+UPDATE_LESSON_SCHEMA = {
+  "type": "object",
+  "properties": {
+    "lesson_id": {"type": "integer"},
+    "title": {"type": "string"},
+    "file_path": {"type": "string"},
+    "quiz_id": {"type": "integer"},
+  },
+  "required": ["lesson_id"]
+}

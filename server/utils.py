@@ -25,6 +25,8 @@ def obj_to_list(data):
 
 def obj_to_dict(data):
     response = {}
+    if data is None:
+        return {}
     for c in data.__table__.columns:
         if c.name not in ["created_date", "updated_date"]:
             response[c.name] = getattr(data, c.name)

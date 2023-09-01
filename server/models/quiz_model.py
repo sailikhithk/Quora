@@ -12,12 +12,6 @@ class Quiz(Base):
     title = Column(String(128))
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     pass_marks = Column(Float)
-    next_quiz_to_unlock = Column(String)
+    next_lessons_to_unlock = Column(String)
     created_date = Column(DateTime, default=func.now(), nullable=False)
     updated_date = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
-
-    # Relationships
-    questions = relationship("Question", backref="quiz", lazy="dynamic")
-    results = relationship("Result", backref="quiz", lazy="dynamic")
-    author = relationship("User", back_populates="quizzes", overlaps="quiz_author")
-

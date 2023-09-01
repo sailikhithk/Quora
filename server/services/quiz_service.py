@@ -79,24 +79,34 @@ class QuizService:
             return {"error": "Quiz not found"}
         return quiz
 
-    def create_quiz(self, title, user_id, pass_marks, next_quiz_to_unlock):
-        serialized_next_quiz_to_unlock = json.dumps(next_quiz_to_unlock)
-        new_quiz = Quiz(
-            title=title,
-            author_id=user_id,
-            pass_marks=pass_marks,
-            next_quiz_to_unlock=serialized_next_quiz_to_unlock,
-        )
-        session.add(new_quiz)
-        session.commit()
-        return {"message": "Quiz created", "id": new_quiz.id}
-
-    def delete_quiz(self, quiz_id):
-        quiz = session.query(Quiz).filter_by(id=quiz_id).first()
-        if quiz:
-            session.delete(quiz)
+    def create_quiz(self, title, user_id, pass_marks, next_lessons_to_unlock):
+        try:
+            serialized_next_lessons_to_unlock = json.dumps(next_lessons_to_unlock)
+            new_quiz = Quiz(
+                title=title,
+                author_id=user_id,
+                pass_marks=pass_marks,
+                next_lessons_to_unlock=serialized_next_lessons_to_unlock,
+            )
+            session.add(new_quiz)
             session.commit()
-        return {"message": "Quiz Deleted"}
+            return {"message": "Quiz created", "id": new_quiz.id, "status": True}
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return {"message": "Quiz not created", "status": False}
+    
+    def delete_quiz(self, quiz_id):
+        try:
+            quiz = session.query(Quiz).filter_by(id=quiz_id).first()
+            if quiz:
+                session.delete(quiz)
+                session.commit()
+            return {"message": "Quiz Deleted", "status": False}
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return {"message": "Quiz not Deleted", "status": False}
 
     def combine_options(self, row):
         return [row["Option 1"], row["Option 2"], row["Option 3"], row["Option 4"]]
@@ -110,11 +120,11 @@ class QuizService:
             meta_data_dic = dict(zip(meta_data["preference"], meta_data["value"]))
             meta_data_dic["quiz_name"] = meta_data_dic["Name"]
             meta_data_dic["pass_marks"] = meta_data_dic["Pass Marks"]
-            meta_data_dic["next_quiz_to_unlock"] = meta_data_dic["next quiz to unlock"]
+            meta_data_dic["next_lessons_to_unlock"] = meta_data_dic["next lessons to unlock"]
             meta_data_dic.pop("Name", None)
             meta_data_dic.pop("Pass Marks", None)
-            meta_data_dic.pop("next quiz to unlock", None)
-
+            meta_data_dic.pop("next lessons to unlock", "2")
+            
             questions_df = pd.read_excel(file, header=6)
             column_mapping = {
                 "Questions": "questions",
@@ -151,16 +161,16 @@ class QuizService:
                 return self.upload_quiz_json(meta_data_dic)
         except Exception as e:
             traceback.print_exc()
-            return {"error": str(e)}
+            return {"message": "Quiz not created", "status": False}
 
     def upload_quiz_json(self, data):
         user_id = data["user_id"]
         quiz_name = data["quiz_name"]
         questions = data["questions"]
         pass_marks = data["pass_marks"]
-        next_quiz_to_unlock = data["next_quiz_to_unlock"]
+        next_lessons_to_unlock = data["next_lessons_to_unlock"]
 
-        result = self.create_quiz(quiz_name, user_id, pass_marks, next_quiz_to_unlock)
+        result = self.create_quiz(quiz_name, user_id, pass_marks, next_lessons_to_unlock)
         quiz_id = result.get("id", None)
         for question in questions:
             question_service_obj.create_question(question, quiz_id)
