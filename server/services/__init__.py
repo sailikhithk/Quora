@@ -5,3 +5,4 @@ from .user_service import UserService
 
 
 from .result_service import ResultService
+from .lesson_service import LessonService

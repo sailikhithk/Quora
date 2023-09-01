@@ -123,3 +123,7 @@ SUBMIT_ANSWER_SCHEMA = {
   },
   "required": ["quiz_id", "content"]
 }
+
+
+UPDATE_LESSON_SCHEMA = {}
+CREATE_LESSON_SCHEMA = {}
