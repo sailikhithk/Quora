@@ -24,7 +24,7 @@ def get_question(id):
 
 
 @question.route("/<int:id>/delete_question", methods=["GET"])
-def get_question(id):
+def delete_question(id):
     try:
         question = question_service_obj.delete_question(id)
         if not question:
