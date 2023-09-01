@@ -17,7 +17,7 @@ import Profile from "./components/Profile";
 import styled from "styled-components";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "http://localhost:5001",
 });
 
 const GlobalStyle = createGlobalStyle`
