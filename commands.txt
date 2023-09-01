@@ -1,0 +1,2 @@
+tree -I 'node_modules|venv|__pycache__' > tree.txt
+sudo /Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron

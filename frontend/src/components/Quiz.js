@@ -68,11 +68,11 @@ const Quiz = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [answers, setAnswers] = useState({});
+  const user_id = localStorage.getItem("user_id"); // Retrieve the user_id from localStorage
 
   const fetchQuiz = useCallback(async () => {
     try {
       const response = await apiService.get(`/quiz/${id}/questions`);
-      console.log("API Response:", response.data);
       setQuiz(response.data);
       setQuestions(response.data.questions);
     } catch (error) {
@@ -85,25 +85,25 @@ const Quiz = () => {
   }, [fetchQuiz]);
 
   const handleChange = (e, questionId) => {
-    setAnswers({ ...answers, [questionId]: e.target.value });
+    const selectedIndex = e.target.value;
+    setAnswers({ ...answers, [questionId]: parseInt(selectedIndex, 10) });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const formattedAnswers = Object.keys(answers).map((question_id) => ({
-        question_id,
+        question_id: parseInt(question_id, 10),
         selected_options: [answers[question_id]],
       }));
       const payload = {
-        quiz_id: id,
+        user_id: parseInt(user_id, 10),
+        quiz_id: parseInt(id, 10),
         content: formattedAnswers,
       };
-      const response = await apiService.post(`/result/submit_answer`, payload); // removed headers configuration
-
-      // Alert the user with their score
+      const response = await apiService.post(`/result/submit_answer`, payload);
       alert(`Your score is: ${response.data.score}`);
-      navigate("/result");
+      navigate(`/result/${user_id}`);
     } catch (error) {
       console.error(error);
     }
@@ -125,7 +125,7 @@ const Quiz = () => {
                 type="radio"
                 id={`question-${question.id}-option-${index}`}
                 name={`question-${question.id}`}
-                value={answer}
+                value={index}
                 onChange={(e) => handleChange(e, question.id)}
               />
               {answer}
