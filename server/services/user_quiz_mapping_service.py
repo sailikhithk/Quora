@@ -1,5 +1,5 @@
 from database import session
-from models.user_quiz_mapping_model import UserQuizMapping
+from models import UserQuizMapping
 from utils import obj_to_dict
 
 class UserQuizMappingService:
@@ -18,7 +18,7 @@ class UserQuizMappingService:
             setattr(record, column, value)
 
         session.commit()
-        return True
+        return record.id
     
     def create_record(self, user_id, quiz_id, is_qualified, max_scored_marks):
         new_result = UserQuizMapping(
@@ -30,4 +30,4 @@ class UserQuizMappingService:
         )
         session.add(new_result)
         session.commit()
-        return True   
+        return  new_result.id  

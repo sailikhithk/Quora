@@ -1,8 +1,7 @@
 import traceback
 from flask_jwt_extended import create_access_token
 
-from models.user_model import User
-from models.role_model import Role
+from models import User, Role
 from utils import encrypt, decrypt
 from database import session
 

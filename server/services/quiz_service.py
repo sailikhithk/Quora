@@ -1,4 +1,4 @@
-from models import Quiz, Question, UserQuizMapping
+from models import Quiz, Question, UserQuizMapping, Role, User
 from services import QuestionService
 from database import session
 from sqlalchemy.orm import aliased
@@ -14,6 +14,23 @@ question_service_obj = QuestionService()
 class QuizService:
     def __init__(self):
         pass
+
+    def is_valid_admin(self, user_id):
+        try:
+            admin_role = session.query(Role).filter_by(name="Admin").first()
+            if admin_role:
+                admin_id = admin_role.id
+            else:
+                return False
+            user = session.query(User).filter_by(id=user_id).filter_by(role_id=admin_id)
+            if user:
+                return True
+            else:
+                return False
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return False
 
     def get_all_quizzes(self, user_id):
         try:
@@ -81,6 +98,9 @@ class QuizService:
 
     def create_quiz(self, title, user_id, pass_marks, next_lessons_to_unlock):
         try:
+            if not self.is_valid_admin(user_id):
+                return {"message": "Invalid user try to check with admin", "status": False}
+            
             serialized_next_lessons_to_unlock = json.dumps(next_lessons_to_unlock)
             new_quiz = Quiz(
                 title=title,

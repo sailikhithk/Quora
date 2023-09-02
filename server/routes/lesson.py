@@ -11,7 +11,6 @@ logger = logging.getLogger("lesson")
 
 lesson_service_obj = LessonService()
 
-
 @lesson.route("/create", methods=["POST"])
 def create():
     try:

@@ -1,5 +1,5 @@
 from database import session
-from models.result_model import Result
+from models import Result, Quiz, User
 from utils import obj_to_dict
 from services import QuestionService, QuizService, UserQuizMappingService
 
@@ -25,13 +25,16 @@ class ResultService:
         )
         session.add(new_result)
         session.commit()
-        return {"message": "results updated"}
+        return new_result.id
     
     def submit_answer(self, content, user_id, quiz_id):
         total_score = 0
         answers = []
         quiz = quiz_service_obj.get_quiz(quiz_id)
-        quiz_pass_mark = quiz.get("pass_marks", 100)
+        quiz =  session.query(Quiz).filter_by(id=quiz_id).first()
+        quiz_dic = obj_to_dict(quiz)        
+        quiz_pass_mark = quiz_dic.get("pass_marks", 100)
+        next_lessons_to_unlock = quiz_dic.get("next_lessons_to_unlock", "")
             
         # evaluating answers
         for i in content:
@@ -66,7 +69,27 @@ class ResultService:
         if total_score >= quiz_pass_mark:
             is_qualified = True
         
-        self.create_result(total_score, quiz_id, user_id, answers, is_qualified)
+        result_id = self.create_result(total_score, quiz_id, user_id, answers, is_qualified)
+        
+        if is_qualified:
+            # updating lessions unlocked 
+            user = session.query(User).filter_by(id=user_id).first()
+            lessons_unlocked = user.lessons_unlocked
+            if lessons_unlocked in ["", " "]:
+                user.lessons_unlocked = next_lessons_to_unlock
+            else:
+                lessons_unlocked = lessons_unlocked.replace('"', "").split(",")
+                new_unlocked_lessons = []
+                for ul in next_lessons_to_unlock.split(","):
+                    if ul not in lessons_unlocked:
+                        new_unlocked_lessons.append(ul.replace('"', "").strip())
+                
+                lessons_unlocked = lessons_unlocked + new_unlocked_lessons
+                lessons_unlocked = ",".join(list(set(lessons_unlocked)))
+                
+                user.lessons_unlocked = lessons_unlocked
+                session.commit()
+
         user_quiz_info = user_quiz_mapping_obj.get_record(user_id, quiz_id)
         if user_quiz_info:
             update_dic = {}
@@ -81,4 +104,4 @@ class ResultService:
         else:
             user_quiz_mapping_obj.create_record(user_id, quiz_id, is_qualified, total_score)
                 
-        return {"score": total_score}
+        return {"status": True, "score": total_score, "is_qualified": is_qualified, "result_id": result_id}

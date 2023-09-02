@@ -1,7 +1,6 @@
 import traceback
 from flask_jwt_extended import create_access_token
-from models import Lesson
-from models import User
+from models import Lesson, User, Role
 from utils import encrypt, decrypt, obj_to_dict, obj_to_list
 from database import session
 import os
@@ -17,8 +16,29 @@ class LessonService:
     def get_lesson_by_id(self, id):
         return session.query(Lesson).filter_by(id=id).first()
     
+    def is_valid_admin(self, user_id):
+        try:
+            admin_role = session.query(Role).filter_by(name="Admin").first()
+            if admin_role:
+                admin_id = admin_role.id
+            else:
+                return False
+            user = session.query(User).filter_by(id=user_id).filter_by(role_id=admin_id)
+            if user:
+                return True
+            else:
+                return False
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return False
+
     def create_lesson(self, data):
         try:
+            user_id = data['author_id']
+            if not self.is_valid_admin(user_id):
+                return {"message": "Invalid user try to check with admin", "status": False}
+            
             lesson_name = data['title']
             existing_lesson = self.get_lesson_by_title(lesson_name)
             if existing_lesson:
@@ -35,6 +55,10 @@ class LessonService:
 
     def update_lesson(self, data):
         try:
+            user_id = data['author_id']
+            if not self.is_valid_admin(user_id):
+                return {"message": "Invalid user try to check with admin", "status": False}
+            
             lesson_id = data['lesson_id']
             lesson = self.get_lesson_by_id(lesson_id)
             if not lesson:

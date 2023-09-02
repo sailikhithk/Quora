@@ -27,7 +27,6 @@ def get_result(id):
 
 
 @result.route("/submit_answer", methods=["POST"])
-# @jwt_required()
 def submit_answer():
     try:
         data = request.get_json()

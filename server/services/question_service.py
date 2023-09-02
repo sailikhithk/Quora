@@ -1,4 +1,4 @@
-from models.question_model import Question
+from models import Question
 from database import session
 from utils import obj_to_list, obj_to_dict
 
