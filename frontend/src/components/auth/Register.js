@@ -1,7 +1,6 @@
 // frontend/src/components/auth/Register.js
 
 import React, { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import quizImage from "../../assets/quiz-time.webp";

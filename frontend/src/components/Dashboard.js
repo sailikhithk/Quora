@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import apiService from "../services/apiService";
 import styled from "styled-components";
+
+import Lessons from "./Lessons";
+
+import apiService from "../services/apiService";
 
 const DashboardContainer = styled.div`
   padding-left: 15%; // Padding to offset the Navbar
@@ -46,9 +49,9 @@ const QuizDetails = styled.div`
   align-items: center;
 `;
 
-const DashboardButton = styled.button`
+const LessonButton = styled.button`
   color: #fff;
-  background-color: #00B2FF;
+  background-color: #00b2ff;
   border: none;
   border-radius: 20px;
   padding: 0.5rem 1rem;
@@ -61,7 +64,12 @@ const DashboardButton = styled.button`
 `;
 
 const Dashboard = () => {
+  // states
   const [quizzes, setQuizzes] = useState([]);
+  const [page, setPage] = useState("DASHBOARD");
+  const [quizId, setQuizId] = useState("");
+
+  // local storage
   const user_id = localStorage.getItem("user_id");
 
   useEffect(() => {
@@ -78,87 +86,100 @@ const Dashboard = () => {
     fetchQuizzes();
   }, [user_id]);
 
+  const handleLesson = (id = "") => {
+    setPage("LESSON");
+    setQuizId(id);
+  };
+
   return (
-    <DashboardContainer>
-      <h2 style={{ color: "#071437" }}>Your Quiz Performance Summary</h2>
-      <QuizSummary>
-        {quizzes.map((quiz) => (
-          <QuizCard key={quiz.quiz_id}>
-            <QuizTitle>{quiz.title}</QuizTitle>
-            <div style={{ marginTop: "20px" }}>
-              <QuizDetails>
-                <span style={{ color: "#B5B5C3", fontSize: "1rem" }}>
-                  Recent Score:{" "}
-                </span>
-                <span
+    <>
+      {page === "DASHBOARD" ? (
+        <DashboardContainer>
+          <h2 style={{ color: "#071437" }}>Your Quiz Performance Summary</h2>
+          <QuizSummary>
+            {quizzes.map((quiz) => (
+              <QuizCard key={quiz.quiz_id}>
+                <QuizTitle>{quiz.title}</QuizTitle>
+                <div style={{ marginTop: "20px" }}>
+                  <QuizDetails>
+                    <span style={{ color: "#B5B5C3", fontSize: "1rem" }}>
+                      Recent Score:{" "}
+                    </span>
+                    <span
+                      style={{
+                        color: "#4B5675",
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {quiz.max_scored_marks}
+                    </span>
+                  </QuizDetails>
+                  <QuizDetails>
+                    <span style={{ color: "#B5B5C3", fontSize: "1rem" }}>
+                      Number of Attempts:{" "}
+                    </span>
+                    <span
+                      style={{
+                        color: "#4B5675",
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {quiz.no_of_attempts}
+                    </span>
+                  </QuizDetails>
+                  <QuizDetails>
+                    <span style={{ color: "#B5B5C3", fontSize: "1rem" }}>
+                      Highest Score:{" "}
+                    </span>
+                    <span
+                      style={{
+                        color: "#4B5675",
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {quiz.max_scored_marks}
+                    </span>
+                  </QuizDetails>
+                  <QuizDetails>
+                    <span style={{ color: "#B5B5C3", fontSize: "1rem" }}>
+                      Is Qualified:{" "}
+                    </span>
+                    <span
+                      style={{
+                        color: "#4B5675",
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {quiz.is_qualified ? "Yes" : "No"}
+                    </span>
+                  </QuizDetails>
+                </div>
+                <div
                   style={{
-                    color: "#4B5675",
-                    fontSize: "1rem",
-                    fontWeight: "bold",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "30px",
                   }}
                 >
-                  {quiz.max_scored_marks}
-                </span>
-              </QuizDetails>
-              <QuizDetails>
-                <span style={{ color: "#B5B5C3", fontSize: "1rem" }}>
-                  Number of Attempts:{" "}
-                </span>
-                <span
-                  style={{
-                    color: "#4B5675",
-                    fontSize: "1rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {quiz.no_of_attempts}
-                </span>
-              </QuizDetails>
-              <QuizDetails>
-                <span style={{ color: "#B5B5C3", fontSize: "1rem" }}>
-                  Highest Score:{" "}
-                </span>
-                <span
-                  style={{
-                    color: "#4B5675",
-                    fontSize: "1rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {quiz.max_scored_marks}
-                </span>
-              </QuizDetails>
-              <QuizDetails>
-                <span style={{ color: "#B5B5C3", fontSize: "1rem" }}>
-                  Is Qualified:{" "}
-                </span>
-                <span
-                  style={{
-                    color: "#4B5675",
-                    fontSize: "1rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {quiz.is_qualified ? "Yes" : "No"}
-                </span>
-              </QuizDetails>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: "30px",
-              }}
-            >
-              <DashboardButton as="a" href={`/quiz/${quiz.quiz_id}/questions`}>
-                Attempt Quiz
-              </DashboardButton>
-            </div>
-          </QuizCard>
-        ))}
-      </QuizSummary>
-    </DashboardContainer>
+                  <LessonButton
+                    onClick={() => handleLesson(quiz.quiz_id.toString())}
+                  >
+                    Start Lesson
+                  </LessonButton>
+                </div>
+              </QuizCard>
+            ))}
+          </QuizSummary>
+        </DashboardContainer>
+      ) : (
+        <Lessons quizId={quizId} />
+      )}
+    </>
   );
 };
 
