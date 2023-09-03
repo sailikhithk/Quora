@@ -32,7 +32,15 @@ class QuizService:
             traceback.print_exc()
             return False
 
-    def get_all_quizzes(self, user_id):
+    def get_all_quizzes(self):
+        quiz = session.query(Quiz).all()
+        response = {
+            "status": True,
+            "data": obj_to_list(quiz)
+        }
+        return response
+
+    def get_all_quizzes_by_user_id(self, user_id):
         try:
             QuizAlias = aliased(Quiz)
             UserQuizMappingAlias = aliased(UserQuizMapping)

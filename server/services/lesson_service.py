@@ -109,6 +109,11 @@ class LessonService:
             traceback.print_exc()
             return {"message": str(e), "status": False}
        
+    def full_list(self):
+        lessons = session.query(Lesson).all()
+        lessons_list = obj_to_list(lessons)
+        return  {"data": lessons_list, "status": True}       
+    
     def delete_lesson(self, lesson_id):
         try:
             lesson = session.query(Lesson).get(lesson_id)

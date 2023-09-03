@@ -47,6 +47,15 @@ def get(lesson_id):
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
+@lesson.route("/full_list", methods=["GET"])
+def full_list():
+    try:
+        response = lesson_service_obj.full_list()
+        return jsonify(response)
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
 @lesson.route("/<int:user_id>/list", methods=["GET"])
 def list(user_id):
     try:
@@ -55,6 +64,12 @@ def list(user_id):
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+
+
+
+
+
+
 
 @lesson.route("/<int:lesson_id>/delete", methods=["DELETE"])
 def delete(lesson_id):

@@ -26,12 +26,20 @@ def get_all_quizzes(user_id):
     :return: JSON object containing quizzes
     """
     try:
-        quizzes = quiz_service_obj.get_all_quizzes(user_id)
+        quizzes = quiz_service_obj.get_all_quizzes_by_user_id(user_id)
         return jsonify(quizzes), 200
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
+@quiz.route("/full_list", methods=["GET"])
+def get_full_list():
+    try:
+        quizzes = quiz_service_obj.get_all_quizzes()
+        return jsonify(quizzes), 200
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 
 @quiz.route("/upsert_quiz", methods=["POST"])
 def upload_quiz():
