@@ -2,7 +2,7 @@ import traceback
 from flask_jwt_extended import create_access_token
 
 from models import User, Role
-from utils import encrypt, decrypt
+from utils import encrypt, decrypt, obj_to_list
 from database import session
 
 class UserService:
@@ -97,14 +97,16 @@ class UserService:
 
     def reset_password(self, data):
         try:
-            password = data["password"]
-            user_id = data["user_id"]
+            password = data["new_password"]
+            email = data["email"]
 
             hashed_password = encrypt(password)
-            user = self.get_user_by_id(user_id)
+            user = self.get_user_by_email(email)
+            if not user:
+                return {"message": "Invalid email", "status": False}    
             user.password_hash = hashed_password
             session.commit()
-            return {"message": "Password updated, relogin again", "status": False}
+            return {"message": "Password updated, relogin again", "status": True}
         except Exception as e:
             session.rollback()
             traceback.print_exc()
@@ -126,4 +128,8 @@ class UserService:
             session.rollback()
             traceback.print_exc()
             return False
+        
+    def user_list(self):
+        users = session.query(User).all()
+        return obj_to_list(users)
     

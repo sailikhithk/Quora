@@ -22,10 +22,10 @@ LOGIN_SCHEMA = {
 RESET_PASSWORD_SCHEMA = {
     "type": "object",
     "properties": {
-        "user_id": {"type": "integer"},
-        "password": {"type": "string"}
+        "email": {"type": "string"},
+        "new_password": {"type": "string"}
     },
-    "required": ["user_id", "password"]
+    "required": ["email", "new_password"]
 }
 
 ADMIN_CREATE_USER_SCHEMA = {

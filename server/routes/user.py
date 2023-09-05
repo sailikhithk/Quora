@@ -61,3 +61,14 @@ def reset_password():
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+    
+
+@user.route("/user_list", methods=["POST"])
+def user_list():
+    try:
+        response = user_service_obj.user_list()
+        return jsonify(response)
+    
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
