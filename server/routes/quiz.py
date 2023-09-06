@@ -55,6 +55,8 @@ def upload_quiz():
     :return: JSON object with response message
     """
     try:
+        print("request", request)
+        print("request.files", request.files)
         if "file" in request.files:
             # uploading quiz via file
             file = request.files["file"]
