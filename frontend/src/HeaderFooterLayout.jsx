@@ -86,7 +86,7 @@ const CustomDrawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function HeaderFooterLayout({ render: Component }) {
+export default function HeaderFooterLayout({ Component }) {
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -239,12 +239,12 @@ export default function HeaderFooterLayout({ render: Component }) {
         </DrawerFooter>
       </CustomDrawer>
       <div className="py-4 overflow-y-hidden " style={{ flexGrow: 1, background: "#f5f5f5" }}>
-        <Component />
+        {Component} 
       </div>
     </Box>
   );
 }
 
 HeaderFooterLayout.propTypes = {
-  render: PropTypes.element.isRequired,
+  Component: PropTypes.element.isRequired,
 };

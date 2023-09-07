@@ -70,7 +70,7 @@ export default function LessonView() {
             </div>
         </div>
         </TabPanel>
-        <TabPanel value="2"><QuizPage id={1}  setValue={setValue} /></TabPanel>
+        <TabPanel value="2" className="h-full w-full p-0 pb-4 overflow-y-scroll" ><QuizPage id={1}  setValue={setValue} /></TabPanel>
       </TabContext>
     </div>
   );

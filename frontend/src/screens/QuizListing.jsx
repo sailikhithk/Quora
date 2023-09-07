@@ -15,15 +15,15 @@ import GLOBAL_CONSTANTS from '../../GlobalConstants';
 
 
 function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+  return { name, calories, fat, carbs, protein};
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24),
-  createData('Ice cream sandwich', 237, 9.0, 37),
-  createData('Eclair', 262, 16.0, 24),
-  createData('Cupcake', 305, 3.7, 67),
-  createData('Gingerbread', 356, 16.0, 49),
+  createData('Frozen yoghurt', 159, 6.0, 50,100),
+  createData('Ice cream sandwich', 237, 9.0, 50,100),
+  createData('Eclair', 262, 16.0, 50,100),
+  createData('Cupcake', 305, 3.7, 50,100),
+  createData('Gingerbread', 356, 16.0, 50,100),
 ];
 
 export default function QuizListing() {
@@ -78,9 +78,10 @@ export default function QuizListing() {
         <TableHead style={{background:"linear-gradient(1deg,#7b24d240 30%, #9c27b050)"}} >
           <TableRow>
             <TableCell>User Name</TableCell>
-            <TableCell align="">Email</TableCell>
-            <TableCell align="">Institution</TableCell>
-            <TableCell align="">Role</TableCell>
+            <TableCell >Email</TableCell>
+            <TableCell >Institution</TableCell>
+            <TableCell >Number of Question</TableCell>
+            <TableCell >Marks</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -92,9 +93,10 @@ export default function QuizListing() {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell align="">{row.calories}</TableCell>
-              <TableCell align="">{row.fat}</TableCell>
-              <TableCell align="">{row.carbs}</TableCell>
+              <TableCell>{row.calories}</TableCell>
+              <TableCell>{row.fat}</TableCell>
+              <TableCell>{row.carbs}</TableCell>
+              <TableCell>{row.protein}</TableCell>
             </TableRow>
           ))}
         </TableBody>
