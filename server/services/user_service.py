@@ -39,6 +39,34 @@ class UserService:
             traceback.print_exc()
             return {"message": str(e), "status": False}
     
+    def deactivate_user(self, user_id):
+        try:
+            user = self.get_user_by_id(user_id)
+            if user:
+                user.is_active = False
+                session.commit()
+                return {"message": "User deactivate", "status": True}
+            else:
+                return {"message": "User not found", "status": False}            
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return {"message": str(e), "status": False}
+        
+    def activate_user(self, user_id):
+        try:
+            user = self.get_user_by_id(user_id)
+            if user:
+                user.is_active = True
+                session.commit()
+                return {"message": "User activate", "status": True}
+            else:
+                return {"message": "User not found", "status": False}            
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return {"message": str(e), "status": False}
+    
     def register_user(self, data):
         try:
             username = data["username"]
