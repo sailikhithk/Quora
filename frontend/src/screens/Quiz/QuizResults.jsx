@@ -6,7 +6,7 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import CircleIcon from "@mui/icons-material/Circle";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-export default function QuizResults({ questions ,pass }) {
+export default function QuizResults({ questions ,pass ,total_score}) {
     
     const navigate = useNavigate()
 
@@ -19,7 +19,7 @@ export default function QuizResults({ questions ,pass }) {
      <div className="text-purple-800 text-2xl font-semibold flex items-center justify-between gap-4 " >
      Quiz Results 
      <span className={`  border-2  border-dashed py-1 text-xl px-2 min-w-[100px] text-center rounded-3xl ${ pass ? "border-green-500 text-green-500 ": "border-red-500 text-red-500 "}`} >
-     { pass ? " Pass " : " Fail " }
+    {total_score}/50 { pass ? " Pass " : " Fail " }
      </span>
      </div>
     <div className="grid gap-2 ">

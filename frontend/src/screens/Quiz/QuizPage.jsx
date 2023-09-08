@@ -25,6 +25,7 @@ export default function QuizPage({ id,setValue }) {
   const [open, setOpen] = useState(false);
 
   const [results,setResults] = useState(null);
+  const [totalScore,settotalScore]=useState(null);
 
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [activeQuestion, setActiveQuestion] = useState({});
@@ -64,6 +65,7 @@ export default function QuizPage({ id,setValue }) {
     dispatch(quizSubmit(payload, (resp) => {
     console.info(resp,"results")
         setResults(()=>resp?.is_qualified);
+        settotalScore(()=>resp?.score)
         // setTimeout(()=>{
         //     handleChangeClose();
         // },3000)
@@ -102,7 +104,7 @@ export default function QuizPage({ id,setValue }) {
 
   return (
     viewresults? <>
-    <QuizResults questions={questions} pass={results} />
+    <QuizResults questions={questions} pass={results} total_score={totalScore}/>
     </>:
     <>
       <div className=" w-full flex flex-col gap-4 ">

@@ -40,6 +40,9 @@ export default function QuizListing() {
     dispatch(quizCreate({file:profileImage,user_id:GLOBAL_CONSTANTS?.user_cred?.user_id}, () => {}));
   };
 
+  const downloadQuiz=()=>{
+    console.log("downloadQuiz");
+  }
 //   #region image upload 
 
 
