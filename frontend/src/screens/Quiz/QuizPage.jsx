@@ -17,6 +17,7 @@ import FailAnimation from "../../assets/animation_fail.json";
 import LoadingAnimation from "../../assets/animation_loading.json";
 import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
+import QuizResults from "./QuizResults";
 
 export default function QuizPage({ id,setValue }) {
   const { quizView } = useSelector((state) => state.data);
@@ -24,10 +25,13 @@ export default function QuizPage({ id,setValue }) {
   const [open, setOpen] = useState(false);
 
   const [results,setResults] = useState(null);
+  const [totalScore,settotalScore]=useState(null);
 
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [activeQuestion, setActiveQuestion] = useState({});
   const [questions, setQuestions] = useState([]);
+
+  const [viewresults,setViewResults] = useState(false)
 
   const dispatch = useDispatch();
 
@@ -61,9 +65,10 @@ export default function QuizPage({ id,setValue }) {
     dispatch(quizSubmit(payload, (resp) => {
     console.info(resp,"results")
         setResults(()=>resp?.is_qualified);
-        setTimeout(()=>{
-            handleChangeClose();
-        },3000)
+        settotalScore(()=>resp?.score)
+        // setTimeout(()=>{
+        //     handleChangeClose();
+        // },3000)
     }));
   };
 
@@ -83,7 +88,7 @@ export default function QuizPage({ id,setValue }) {
         options: o?.content?.options,
         is_mandatory: o?.content?.is_mandatory,
         marks: o?.content?.marks,
-        correct_option: o?.content?.correct_option,
+        correct_option: o?.content?.correct_option ?? [],
         selected_option: [],
       }));
       setQuestions(() => [...temp]);
@@ -96,9 +101,13 @@ export default function QuizPage({ id,setValue }) {
     }
   }, [activeQuestionIndex, questions]);
 
+
   return (
+    viewresults? <>
+    <QuizResults questions={questions} pass={results} total_score={totalScore}/>
+    </>:
     <>
-      <div className="h-full w-full flex flex-col gap-4 ">
+      <div className=" w-full flex flex-col gap-4 ">
         <div className=" flex items-center justify-between font-custom_1 text-xl font-semibold">
           <div>{quizView?.title}</div>
           <div className="flex gap-4" >
@@ -310,12 +319,12 @@ export default function QuizPage({ id,setValue }) {
                     variant="contained"
                     color="secondary"
                     onClick={() => {
-                      handleChangeClose();
+                      setViewResults(()=>true)
 
                     }}
                   >
                     {" "}
-                    Continue{" "}
+                    View Results{" "}
                   </Button>
                 </div>
                 </div>

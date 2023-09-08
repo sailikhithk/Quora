@@ -66,7 +66,7 @@ export default function Login() {
         backgroundPosition: "center",
       }}
     >
-      <div className="grid md:grid-cols-2 items-center justify-center gap-2 w-[95vw] md:w-[70vw] h-[80vh] outline outline-white bg-white bg-opacity-30 rounded-2xl shadow shadow-white overflow-hidden">
+      <div className="grid md:grid-cols-2 items-center justify-center gap-2 w-[91vw] md:w-[70vw] h-[70vh] outline outline-white bg-white bg-opacity-30 rounded-2xl shadow shadow-white overflow-hidden">
         <div className="hidden md:block w-full h-full bg-center grid items-center justify-center "
          style={{background:`url(${Quiz})`,backgroundPosition:"center",backgroundRepeat:"no-repeat",backgroundSize:"120%"}} 
          >
@@ -74,7 +74,7 @@ export default function Login() {
         </div>
         <div className="relative flex items-center justify-center bg-white h-full w-[98vw] md:w-full bg-opacity-90 p-2 overflow-hidden"  > 
           <div
-            className="absolute h-[70%] w-full flex flex-col gap-4 p-4 "
+            className="absolute h-[70%] w-full flex flex-col gap-4 p-6 "
             style={{ left: loginStep === 0 ? "0" : "-100%" }}
           >
           {
