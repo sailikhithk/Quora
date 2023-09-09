@@ -80,13 +80,31 @@ def activate(user_id):
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
-
-
-
 @user.route("/user_list", methods=["POST"])
 def user_list():
     try:
         response = user_service_obj.user_list()
+        return jsonify(response)
+    
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+    
+
+@user.route("/<int:user_id>/statistics", methods=["POST"])
+def user_statistics():
+    try:
+        response = user_service_obj.user_statistics()
+        return jsonify(response)
+    
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+    
+@user.route("/admin_statistics", methods=["POST"])
+def admin_statistics():
+    try:
+        response = user_service_obj.admin_statistics()
         return jsonify(response)
     
     except Exception as e:

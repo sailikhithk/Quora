@@ -1,16 +1,13 @@
 import traceback
 from flask_jwt_extended import create_access_token
 
-from models import User, Role
+from models import User, Role, Quiz
 from utils import encrypt, decrypt, obj_to_list
 from database import session
 
 class UserService:
     def __init__(self):
         pass
-
-    def get_all_users(self):
-        return self.user_repository.get_all_users()
 
     def get_user_by_id(self, user_id):
         return session.query(User).filter_by(id=user_id).first()
@@ -103,6 +100,9 @@ class UserService:
             if not user:
                 return {"message": "Invalid username or password", "status": False}
 
+            if not user.is_active:
+                return {"message": "username deactivated pls contact Admin", "status": False}
+
             hashpwd = user.password_hash
             db_password = decrypt(hashpwd)
 
@@ -161,3 +161,155 @@ class UserService:
         users = session.query(User).all()
         return obj_to_list(users)
     
+    def admin_statistics(self):
+        try:
+            response = {
+                "cards": [],
+                "graphs": []
+            }
+            total_no_of_quiz = session.query(Quiz).all()
+            active_quiz = session.query(Quiz).filter_by(is_active = True)
+            if active_quiz is None:
+                active_quiz = 0
+            in_active_quiz = session.query(Quiz).filter_by(is_active = False)
+            if in_active_quiz is None:
+                in_active_quiz = 0
+            
+            total_no_of_user = session.query(User).all()
+            active_user = session.query(User).filter_by(is_active = True)
+            if active_user is None:
+                active_user = 0
+            in_active_user = session.query(User).filter_by(is_active = False)
+            if in_active_user is None:
+                in_active_user = 0
+            
+            card_1 = {
+                "name": "Number of Quiz",
+                "value": total_no_of_quiz,
+                "sub_values": {
+                    "active": active_quiz,
+                    "in_active_quiz": in_active_quiz,
+                }
+            }
+            card_2 = {
+                "name": "Number of Users",
+                "value": total_no_of_user,
+                "sub_values": {
+                    "active": active_user,
+                    "in_active_quiz": in_active_user,
+                }
+            }
+            
+            response["cards"] = [card_1, card_2] 
+            
+            # MOCK DATA
+            graph_1 = {
+                "name": "Pass percentage Vs Quiz",
+                "data": [
+                    { "name": 'Quiz 1', "value": 100 },
+                    { "name": 'Quiz 2', "value": 15 },
+                    { "name": 'Quiz 3', "value": 80 },
+                    { "name": 'Quiz 4', "value": 20 },
+                    { "name": 'Quiz 5', "value": 65 },
+                ] 
+            }
+            graph_2 = {
+                "name": "Avg no.of attemps Vs Quiz",
+                "data": [
+                    { "name": 'Quiz 1', "value": 1 },
+                    { "name": 'Quiz 2', "value": 2 },
+                    { "name": 'Quiz 3', "value": 1 },
+                    { "name": 'Quiz 4', "value": 4 },
+                    { "name": 'Quiz 5', "value": 3 },
+                ] 
+            }
+
+            graph_3 = {
+                "name": "No.of students Qulified Vs Quiz",
+                "data": [
+                    { "name": 'Quiz 1', "value": 10 },
+                    { "name": 'Quiz 2', "value": 3 },
+                    { "name": 'Quiz 3', "value": 7 },
+                    { "name": 'Quiz 4', "value": 4 },
+                    { "name": 'Quiz 5', "value": 3 },
+                ] 
+            }
+
+            response["graphs"] = [graph_1, graph_2, graph_3]
+            return {"status": True, "data": response}
+
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return False
+
+    def user_statistics(self):
+        try:
+            response = {
+                "cards": [],
+                "graphs": []
+            }
+            total_no_of_quiz = session.query(Quiz).all()
+            active_quiz = session.query(Quiz).filter_by(is_active = True)
+            if active_quiz is None:
+                active_quiz = 0
+            in_active_quiz = session.query(Quiz).filter_by(is_active = False)
+            if in_active_quiz is None:
+                in_active_quiz = 0
+            
+            total_no_of_user = session.query(User).all()
+            active_user = session.query(User).filter_by(is_active = True)
+            if active_user is None:
+                active_user = 0
+            in_active_user = session.query(User).filter_by(is_active = False)
+            if in_active_user is None:
+                in_active_user = 0
+            
+            card_1 = {
+                "name": "Number of Quiz",
+                "value": total_no_of_quiz,
+                "sub_values": {
+                    "active": active_quiz,
+                    "in_active_quiz": in_active_quiz,
+                }
+            }
+            card_2 = {
+                "name": "Number of Users",
+                "value": total_no_of_user,
+                "sub_values": {
+                    "active": active_user,
+                    "in_active_quiz": in_active_user,
+                }
+            }
+            
+            response["cards"] = [card_1, card_2] 
+            
+            # MOCK DATA
+            graph_1 = {
+                "name": "Percentage of marks scored Vs Quiz",
+                "data": [
+                    { "name": 'Quiz 1', "value": 100 },
+                    { "name": 'Quiz 2', "value": 15 },
+                    { "name": 'Quiz 3', "value": 80 },
+                    { "name": 'Quiz 4', "value": 70 },
+                    { "name": 'Quiz 5', "value": 65 },
+                ] 
+            }
+            graph_2 = {
+                "name": "No.of attemps to qualify Vs Quiz",
+                "data": [
+                    { "name": 'Quiz 1', "value": 1 },
+                    { "name": 'Quiz 2', "value": 2 },
+                    { "name": 'Quiz 3', "value": 1 },
+                    { "name": 'Quiz 4', "value": 4 },
+                    { "name": 'Quiz 5', "value": 3 },
+                ] 
+            }
+
+            response["graphs"] = [graph_1, graph_2]
+            return {"status": True, "data": response}
+
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return False

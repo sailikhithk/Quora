@@ -65,16 +65,28 @@ def list(user_id):
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
-
-
-
-
-
-
 @lesson.route("/<int:lesson_id>/delete", methods=["DELETE"])
 def delete(lesson_id):
     try:
         response = lesson_service_obj.delete_lesson(lesson_id)
+        return jsonify(response)
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+    
+@lesson.route("/<int:lesson_id>/deactivate", methods=["POST"])
+def deactivate(lesson_id):
+    try:
+        response = lesson_service_obj.deactivate(lesson_id)
+        return jsonify(response)
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+@lesson.route("/<int:lesson_id>/activate", methods=["POST"])
+def activate(lesson_id):
+    try:
+        response = lesson_service_obj.activate(lesson_id)
         return jsonify(response)
     except Exception as e:
         traceback.print_exc()
