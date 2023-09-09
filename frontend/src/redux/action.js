@@ -91,7 +91,7 @@ export const user_login = (data, callback) => {
         };
         axios.get(`${GLOBAL_CONSTANTS?.backend_url}/quiz/full_list`, {headers})
         .then((resp) => {
-          dispatch(getQuizList(resp?.data));
+          dispatch(getQuizList(resp?.data?.data));
         })
         .catch((error) => console.log(error));
     };
