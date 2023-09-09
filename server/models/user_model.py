@@ -15,5 +15,6 @@ class User(Base):
     institution = Column(String(128))
     role_id = Column(Integer, ForeignKey("roles.id"))
     lessons_unlocked = Column(String(128), default="1")
+    is_active = Column(Boolean, default=True)
     created_date = Column(DateTime, default=func.now(), nullable=False)
     updated_date = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)

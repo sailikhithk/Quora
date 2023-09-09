@@ -13,6 +13,6 @@ class Lesson(Base):
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     file_path = Column(String(128))
     quiz_id = Column(Integer, ForeignKey("quizzes.id"))
-        
+    is_active = Column(Boolean, default=True) 
     created_date = Column(DateTime, default=func.now(), nullable=False)
     updated_date = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)

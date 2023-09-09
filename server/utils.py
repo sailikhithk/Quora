@@ -18,6 +18,8 @@ def decrypt(data):
 
 def obj_to_list(data):
     list_dicts = []
+    if data is None:
+        return []
     for obj in data:
         list_dicts.append(obj_to_dict(obj))        
     return list_dicts

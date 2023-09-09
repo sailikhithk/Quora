@@ -127,3 +127,32 @@ class LessonService:
             session.rollback()
             traceback.print_exc()
             return {"message": str(e), "status": False}
+        
+
+    def deactivate_lesson(self, lesson_id):
+        try:
+            lesson = self.get_lesson_by_id(lesson_id)
+            if lesson:
+                lesson.is_active = False
+                session.commit()
+                return {"message": "Lesson deactivate", "status": True}
+            else:
+                return {"message": "Lesson not found", "status": False}            
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return {"message": str(e), "status": False}
+        
+    def activate_lesson(self, lesson_id):
+        try:
+            lesson = self.get_lesson_by_id(lesson_id)
+            if lesson:
+                lesson.is_active = True
+                session.commit()
+                return {"message": "Lesson activate", "status": True}
+            else:
+                return {"message": "Lesson not found", "status": False}            
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return {"message": str(e), "status": False}

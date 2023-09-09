@@ -124,3 +124,22 @@ def delete_quiz(quiz_id):
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+
+
+@quiz.route("/<int:quiz_id>/deactivate", methods=["POST"])
+def deactivate(quiz_id):
+    try:
+        response = quiz_service_obj.deactivate(quiz_id)
+        return jsonify(response)
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+@quiz.route("/<int:quiz_id>/activate", methods=["POST"])
+def activate(quiz_id):
+    try:
+        response = quiz_service_obj.activate(quiz_id)
+        return jsonify(response)
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500

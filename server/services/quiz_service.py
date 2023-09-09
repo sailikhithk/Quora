@@ -234,7 +234,7 @@ class QuizService:
             "Name": quiz.title,
             "Total Marks": 100,
             "Pass Marks": quiz.pass_marks,
-            "next quiz to unlock": quiz.next_quiz_to_unlock,
+            "next lessons to unlock": quiz.next_lessons_to_unlock,
         }
         df1 = pd.DataFrame(list(quiz_dic.items()), columns=["preference", "value"])
         df2 = pd.DataFrame(questions)
@@ -285,3 +285,31 @@ class QuizService:
         quiz = obj_to_dict(quiz)
         quiz["questions"] = self.get_questions_by_quiz_id(id)
         return quiz
+
+    def deactivate_quiz(self, quiz_id):
+        try:
+            quiz = self.get_quiz_by_id(quiz_id)
+            if quiz:
+                quiz.is_active = False
+                session.commit()
+                return {"message": "Quiz deactivate", "status": True}
+            else:
+                return {"message": "Quiz not found", "status": False}            
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return {"message": str(e), "status": False}
+        
+    def activate_quiz(self, quiz_id):
+        try:
+            quiz = self.get_quiz_by_id(quiz_id)
+            if quiz:
+                quiz.is_active = True
+                session.commit()
+                return {"message": "Quiz activate", "status": True}
+            else:
+                return {"message": "Quiz not found", "status": False}            
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return {"message": str(e), "status": False}
