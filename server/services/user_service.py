@@ -1,9 +1,10 @@
 import traceback
 from flask_jwt_extended import create_access_token
 
-from models import User, Role, Quiz
+from models import User, Role, Quiz, Result
 from utils import encrypt, decrypt, obj_to_list
 from database import session
+from sqlalchemy import desc
 
 class UserService:
     def __init__(self):
@@ -161,6 +162,56 @@ class UserService:
         users = session.query(User).all()
         return obj_to_list(users)
     
+    def admin_statistics_calculation(self):
+        try:
+            pass_percentage_vs_quiz = []
+            avg_attemps_vs_quiz = []
+            students_qulified_vs_quiz = []
+
+            quiz_list = session.query(Quiz).all()
+            for quiz in quiz_list:
+                temp_dict = {}
+                quiz_id = quiz.id
+                temp_dict["name"] = quiz.title
+                passed_results = session.query(Result).filter_by(quiz_id = quiz_id).filter_by(is_qualified = True).count()
+                if passed_results is None:
+                    passed_results = 0
+                
+                failed_results = session.query(Result).filter_by(quiz_id = quiz_id).filter_by(is_qualified = False).count()
+                if failed_results is None:
+                    failed_results = 0
+
+                try:
+                    percentage = (passed_results / (passed_results + failed_results)) * 100    
+                except:
+                    percentage = 0
+
+                temp_dict["value"] = percentage
+                pass_percentage_vs_quiz.append(temp_dict)
+
+                temp_dict = {}
+                temp_dict["name"] = quiz.title
+                qualified_count = session.query(Result).filter_by(is_qualified=True).filter_by(quiz_id = quiz_id).count()
+                unique_user_count = session.query(Result.user_id).filter_by(is_qualified=True).filter_by(quiz_id = quiz_id).distinct().count()
+                try:
+                    avg_attemps = qualified_count/unique_user_count
+                except:
+                    avg_attemps = 0
+                temp_dict["value"] = avg_attemps
+                avg_attemps_vs_quiz.append(temp_dict)
+
+
+                temp_dict = {}
+                temp_dict["name"] = quiz.title
+                temp_dict["value"] = unique_user_count
+                students_qulified_vs_quiz.append(temp_dict)
+                
+            return pass_percentage_vs_quiz, avg_attemps_vs_quiz, students_qulified_vs_quiz
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return [],[],[]
+    
     def admin_statistics(self):
         try:
             response = {
@@ -203,36 +254,52 @@ class UserService:
             response["cards"] = [card_1, card_2] 
             
             # MOCK DATA
+            # graph_1 = {
+            #     "name": "Pass percentage Vs Quiz",
+            #     "data": [
+            #         { "name": 'Quiz 1', "value": 100 },
+            #         { "name": 'Quiz 2', "value": 15 },
+            #         { "name": 'Quiz 3', "value": 80 },
+            #         { "name": 'Quiz 4', "value": 20 },
+            #         { "name": 'Quiz 5', "value": 65 },
+            #     ] 
+            # }
+            # graph_2 = {
+            #     "name": "Avg no.of attemps Vs Quiz",
+            #     "data": [
+            #         { "name": 'Quiz 1', "value": 1 },
+            #         { "name": 'Quiz 2', "value": 2 },
+            #         { "name": 'Quiz 3', "value": 1 },
+            #         { "name": 'Quiz 4', "value": 4 },
+            #         { "name": 'Quiz 5', "value": 3 },
+            #     ] 
+            # }
+
+            # graph_3 = {
+            #     "name": "No.of students Qulified Vs Quiz",
+            #     "data": [
+            #         { "name": 'Quiz 1', "value": 10 },
+            #         { "name": 'Quiz 2', "value": 3 },
+            #         { "name": 'Quiz 3', "value": 7 },
+            #         { "name": 'Quiz 4', "value": 4 },
+            #         { "name": 'Quiz 5', "value": 3 },
+            #     ] 
+            # }
+
+            graph_1_data, graph_2_data, graph_3_data = self.admin_statistics_calculation()
+            
             graph_1 = {
                 "name": "Pass percentage Vs Quiz",
-                "data": [
-                    { "name": 'Quiz 1', "value": 100 },
-                    { "name": 'Quiz 2', "value": 15 },
-                    { "name": 'Quiz 3', "value": 80 },
-                    { "name": 'Quiz 4', "value": 20 },
-                    { "name": 'Quiz 5', "value": 65 },
-                ] 
+                "data": graph_1_data
             }
             graph_2 = {
                 "name": "Avg no.of attemps Vs Quiz",
-                "data": [
-                    { "name": 'Quiz 1', "value": 1 },
-                    { "name": 'Quiz 2', "value": 2 },
-                    { "name": 'Quiz 3', "value": 1 },
-                    { "name": 'Quiz 4', "value": 4 },
-                    { "name": 'Quiz 5', "value": 3 },
-                ] 
+                "data": graph_2_data
             }
 
             graph_3 = {
                 "name": "No.of students Qulified Vs Quiz",
-                "data": [
-                    { "name": 'Quiz 1', "value": 10 },
-                    { "name": 'Quiz 2', "value": 3 },
-                    { "name": 'Quiz 3', "value": 7 },
-                    { "name": 'Quiz 4', "value": 4 },
-                    { "name": 'Quiz 5', "value": 3 },
-                ] 
+                "data":  graph_3_data
             }
 
             response["graphs"] = [graph_1, graph_2, graph_3]
@@ -242,6 +309,48 @@ class UserService:
             session.rollback()
             traceback.print_exc()
             return False
+
+    def user_statistics_calculation(self, user_id):
+        try:
+            percentage_of_marks_scored_vs_quiz_user_graph = []
+            attemps_to_qualify_vs_quiz = []
+            
+            quiz_list = session.query(Quiz).all()
+            for quiz in quiz_list:
+                temp_dict = {}
+                quiz_id = quiz.id
+                total_marks = quiz.total_marks
+                temp_dict["name"] = quiz.title
+                max_result = session.query(Result).filter_by(quiz_id=quiz_id).filter_by(user_id=user_id).order_by(desc(Result.score)).first()
+                if max_result is None:
+                    temp_dict["value"] = 0 
+                else:
+                    max_scored_marks = max_result.score
+                    try:
+                        percentage = (max_scored_marks / total_marks) * 100
+                    except:
+                        percentage = 0
+
+                    temp_dict["value"] = percentage
+                percentage_of_marks_scored_vs_quiz_user_graph.append(temp_dict)
+
+                temp_dict = {}
+                temp_dict["name"] = quiz.title
+                
+                attempts_count = session.query(Result).filter_by(quiz_id=quiz_id).filter_by(user_id=user_id).count()
+                if max_result is attempts_count:
+                    temp_dict["value"] = 0 
+                else:
+                    temp_dict["value"] = attempts_count
+                attemps_to_qualify_vs_quiz.append(temp_dict)
+
+            return percentage_of_marks_scored_vs_quiz_user_graph, attemps_to_qualify_vs_quiz
+        except Exception as e:
+            session.rollback()
+            traceback.print_exc()
+            return [],[]
+
+    
 
     def user_statistics(self, user_id):
         try:
@@ -286,27 +395,41 @@ class UserService:
             response["cards"] = [card_1, card_2] 
             
             # MOCK DATA
+            # graph_1 = {
+            #     "name": "Percentage of marks scored Vs Quiz",
+            #     "data": [
+            #         { "name": 'Quiz 1', "value": 100 },
+            #         { "name": 'Quiz 2', "value": 15 },
+            #         { "name": 'Quiz 3', "value": 80 },
+            #         { "name": 'Quiz 4', "value": 70 },
+            #         { "name": 'Quiz 5', "value": 65 },
+            #     ] 
+            # }
+            # graph_2 = {
+            #     "name": "No.of attemps to qualify Vs Quiz",
+            #     "data": [
+            #         { "name": 'Quiz 1', "value": 1 },
+            #         { "name": 'Quiz 2', "value": 2 },
+            #         { "name": 'Quiz 3', "value": 1 },
+            #         { "name": 'Quiz 4', "value": 4 },
+            #         { "name": 'Quiz 5', "value": 3 },
+            #     ] 
+            # }
+            
+            
+            graph_1_data, graph_2_data = self.user_statistics_calculation(user_id)
+
+            
+            
             graph_1 = {
                 "name": "Percentage of marks scored Vs Quiz",
-                "data": [
-                    { "name": 'Quiz 1', "value": 100 },
-                    { "name": 'Quiz 2', "value": 15 },
-                    { "name": 'Quiz 3', "value": 80 },
-                    { "name": 'Quiz 4', "value": 70 },
-                    { "name": 'Quiz 5', "value": 65 },
-                ] 
+                "data": graph_1_data
             }
             graph_2 = {
                 "name": "No.of attemps to qualify Vs Quiz",
-                "data": [
-                    { "name": 'Quiz 1', "value": 1 },
-                    { "name": 'Quiz 2', "value": 2 },
-                    { "name": 'Quiz 3', "value": 1 },
-                    { "name": 'Quiz 4', "value": 4 },
-                    { "name": 'Quiz 5', "value": 3 },
-                ] 
+                "data": graph_2_data
             }
-
+            
             response["graphs"] = [graph_1, graph_2]
             return {"status": True, "data": response}
 
