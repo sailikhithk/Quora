@@ -17,7 +17,8 @@ def create_dummy_roles():
 
 
 def create_dummy_users():
-    roles = session.query(Role).all()
+    url = "http://localhost:5000/auth/register"
+
     users_data = [
         {
             "username": "harnath-a",
@@ -62,23 +63,13 @@ def create_dummy_users():
             "role": "Student",
         }
     ]
-    for user_data in users_data:
-        existing_user = (
-            session.query(User).filter_by(username=user_data["username"]).first()
-        )
-        if not existing_user:
-            role_id = next(
-                (role.id for role in roles if role.name == user_data["role"]), None
-            )
-            user = User(
-                username=user_data["username"],
-                password_hash=user_data["password"],
-                email=user_data["email"],
-                institution=user_data["institution"],
-                role_id=role_id,
-            )
-            session.add(user)
-    session.commit()
+    
+    for i in users_data:
+        headers = {
+        'Content-Type': 'application/json'
+        }
+        response = requests.request("POST", url, headers=headers, data=json.dumps(i))
+        print(response.text)
 
 def create_dummy_quizzes():
     url = "http://localhost:5000/quiz/upsert_quiz"
