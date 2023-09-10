@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useEffect, useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,12 +6,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, Button, Modal } from '@mui/material';
+import { Box, Button, IconButton, Modal, Radio } from '@mui/material';
 import ClearSharpIcon from "@mui/icons-material/ClearSharp";
-import { quizCreate } from '../redux/action';
-import { useDispatch } from 'react-redux';
+import { loadQuizList, quizCreate } from '../redux/action';
+import { useDispatch, useSelector } from 'react-redux';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import GLOBAL_CONSTANTS from '../../GlobalConstants';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 function createData(name, calories, fat, carbs, protein) {
@@ -29,6 +30,9 @@ const rows = [
 export default function QuizListing() {
   const dispatch = useDispatch();
   const [open,setOpen] = useState(false);
+  const [selectedRow,setselectedRow]=useState(null);
+  const { quizList } = useSelector((state) => state.data);
+
   
   const [profileImage, setProfileImage] = useState([]);
   const handleFileSelect = (event) => {
@@ -43,6 +47,18 @@ export default function QuizListing() {
   const downloadQuiz=()=>{
     console.log("downloadQuiz");
   }
+
+  const handleRowSelection=()=>{
+    console.log("testrowselect")
+  }
+
+  useEffect(()=>{
+dispatch(loadQuizList());
+  },[])
+
+  useEffect(()=>{
+console.log("quizList",quizList)
+  },[quizList])
 //   #region image upload 
 
 
@@ -73,33 +89,41 @@ export default function QuizListing() {
   return (
     <div className='grid gap-4 p-4'>
 <div className='' >
-<Button variant='contained' color='secondary' onClick={()=>{setOpen(true)}} > Create Quiz </Button>
+{selectedRow!=null && <Button variant='contained' color='secondary' onClick={()=>{setOpen(true)}} >Edit Selected Quiz</Button>}
+<Button variant='contained' color='secondary' style={{marginLeft:"10px"}} onClick={()=>{setOpen(true)}} >Create Quiz</Button>
+
 </div>
 <div className='' >
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead style={{background:"linear-gradient(1deg,#7b24d240 30%, #9c27b050)"}} >
           <TableRow>
-            <TableCell>User Name</TableCell>
-            <TableCell >Email</TableCell>
-            <TableCell >Institution</TableCell>
-            <TableCell >Number of Question</TableCell>
-            <TableCell >Marks</TableCell>
+            <TableCell>Select</TableCell>
+            <TableCell>Ttitle</TableCell>
+            <TableCell >Pass Marks</TableCell>
+            <TableCell >Lesson to unLock</TableCell>
+            <TableCell >Created Date</TableCell>
+            <TableCell >Last Updated Date</TableCell>
+            <TableCell >Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {quizList.map((row) => (
             <TableRow
-              key={row.name}
+              key={row.title}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {row.name}
+              <TableCell >
+                <Radio onChange={()=>{setselectedRow(row.id)}}  checked={selectedRow==row.id?true:false}></Radio>
               </TableCell>
-              <TableCell>{row.calories}</TableCell>
-              <TableCell>{row.fat}</TableCell>
-              <TableCell>{row.carbs}</TableCell>
-              <TableCell>{row.protein}</TableCell>
+              <TableCell component="th" scope="row">
+                {row.title}
+              </TableCell>
+              <TableCell>{row.pass_marks}</TableCell>
+              <TableCell>{row.next_lessons_to_unlock}</TableCell>
+              <TableCell>{row.created_date}</TableCell>
+              <TableCell>{row.updated_date}</TableCell>
+              <TableCell><DeleteIcon></DeleteIcon></TableCell>
             </TableRow>
           ))}
         </TableBody>
