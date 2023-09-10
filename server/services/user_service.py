@@ -167,19 +167,19 @@ class UserService:
                 "cards": [],
                 "graphs": []
             }
-            total_no_of_quiz = session.query(Quiz).all()
-            active_quiz = session.query(Quiz).filter_by(is_active = True)
+            total_no_of_quiz = session.query(Quiz).count()
+            active_quiz = session.query(Quiz).filter_by(is_active = True).count()
             if active_quiz is None:
                 active_quiz = 0
-            in_active_quiz = session.query(Quiz).filter_by(is_active = False)
+            in_active_quiz = session.query(Quiz).filter_by(is_active = False).count()
             if in_active_quiz is None:
                 in_active_quiz = 0
             
-            total_no_of_user = session.query(User).all()
-            active_user = session.query(User).filter_by(is_active = True)
+            total_no_of_user = session.query(User).count()
+            active_user = session.query(User).filter_by(is_active = True).count()
             if active_user is None:
                 active_user = 0
-            in_active_user = session.query(User).filter_by(is_active = False)
+            in_active_user = session.query(User).filter_by(is_active = False).count()
             if in_active_user is None:
                 in_active_user = 0
             
@@ -243,25 +243,26 @@ class UserService:
             traceback.print_exc()
             return False
 
-    def user_statistics(self):
+    def user_statistics(self, user_id):
         try:
             response = {
                 "cards": [],
                 "graphs": []
             }
-            total_no_of_quiz = session.query(Quiz).all()
-            active_quiz = session.query(Quiz).filter_by(is_active = True)
+            total_no_of_quiz = session.query(Quiz).count()
+            active_quiz = session.query(Quiz).filter_by(is_active = True).count()
             if active_quiz is None:
                 active_quiz = 0
-            in_active_quiz = session.query(Quiz).filter_by(is_active = False)
+            
+            in_active_quiz = session.query(Quiz).filter_by(is_active = False).count()
             if in_active_quiz is None:
                 in_active_quiz = 0
             
-            total_no_of_user = session.query(User).all()
-            active_user = session.query(User).filter_by(is_active = True)
+            total_no_of_user = session.query(User).count()
+            active_user = session.query(User).filter_by(is_active = True).count()
             if active_user is None:
                 active_user = 0
-            in_active_user = session.query(User).filter_by(is_active = False)
+            in_active_user = session.query(User).filter_by(is_active = False).count()
             if in_active_user is None:
                 in_active_user = 0
             

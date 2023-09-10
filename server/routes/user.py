@@ -62,19 +62,19 @@ def reset_password():
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
     
-@user.route("/<int:user_id>/deactivate", methods=["POST"])
+@user.route("/<int:user_id>/deactivate", methods=["GET"])
 def deactivate(user_id):
     try:
-        response = user_service_obj.deactivate(user_id)
+        response = user_service_obj.deactivate_user(user_id)
         return jsonify(response)
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
-@user.route("/<int:user_id>/activate", methods=["POST"])
+@user.route("/<int:user_id>/activate", methods=["GET"])
 def activate(user_id):
     try:
-        response = user_service_obj.activate(user_id)
+        response = user_service_obj.activate_user(user_id)
         return jsonify(response)
     except Exception as e:
         traceback.print_exc()
@@ -91,17 +91,17 @@ def user_list():
         return jsonify({"error": str(e)}), 500
     
 
-@user.route("/<int:user_id>/statistics", methods=["POST"])
-def user_statistics():
+@user.route("/<int:user_id>/statistics", methods=["GET"])
+def user_statistics(user_id):
     try:
-        response = user_service_obj.user_statistics()
+        response = user_service_obj.user_statistics(user_id)
         return jsonify(response)
     
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
     
-@user.route("/admin_statistics", methods=["POST"])
+@user.route("/admin_statistics", methods=["GET"])
 def admin_statistics():
     try:
         response = user_service_obj.admin_statistics()
