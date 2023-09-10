@@ -80,7 +80,7 @@ def activate(user_id):
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
-@user.route("/user_list", methods=["POST"])
+@user.route("/user_list", methods=["GET"])
 def user_list():
     try:
         response = user_service_obj.user_list()

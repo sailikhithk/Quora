@@ -147,6 +147,10 @@ class QuizService:
             meta_data = pd.read_excel(file, header=0, skiprows=0, nrows=4)
             meta_data_dic = dict(zip(meta_data["preference"], meta_data["value"]))
             meta_data_dic["quiz_name"] = meta_data_dic["Name"]
+            existing_quiz = session.query(Quiz).filter_by(title = meta_data_dic["quiz_name"]).first()
+            if existing_quiz:
+                return {"message": "Quiz with same name exist", "status": False}
+            
             meta_data_dic["pass_marks"] = meta_data_dic["Pass Marks"]
             meta_data_dic["next_lessons_to_unlock"] = meta_data_dic["next lessons to unlock"]
             meta_data_dic.pop("Name", None)

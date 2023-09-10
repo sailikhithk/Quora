@@ -1,5 +1,4 @@
 # main.py
-import os
 import logging
 
 from flask import Flask, request
@@ -84,6 +83,22 @@ def after_request(response):
         print("Data:", response.get_data(as_text=True))
     return response
 
+@app.cli.command('insert_dummy_data')
+def insert_dummy_data():
+    with app.app_context():
+        from create_db import (
+            create_dummy_roles,
+            create_dummy_users,
+            create_dummy_quizzes,
+            create_dummy_lesson,
+            create_dummy_results
+        )
+    create_dummy_roles()
+    create_dummy_users()
+    create_dummy_quizzes()     
+    create_dummy_lesson()
+    create_dummy_results()  
+        
 
 # Main entry point for running the application
 if __name__ == "__main__":
@@ -96,18 +111,5 @@ if __name__ == "__main__":
     from models.profile_model import Profile
 
     Base.metadata.create_all(engine)
-
-    # Creating dummy data (uncomment if needed)
-    from create_db import (
-        create_dummy_roles,
-        # create_dummy_users,
-        # create_dummy_quizzes,
-        # create_dummy_questions,
-        # create_dummy_results,
-        # create_dummy_profiles,
-    )
-
-    create_dummy_roles()
-
     # Starting Flask development server
     app.run(host='0.0.0.0', debug=True)
