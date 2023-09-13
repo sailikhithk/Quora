@@ -10,6 +10,18 @@ REGISTER_SCHEMA = {
     "required": ["username", "password", "email", "institution", "role"],
 }
 
+UPDATE_USER_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "username": {"type": "string"},
+        "password": {"type": "string"},
+        "email": {"type": "string", "format": "email"},
+        "institution": {"type": "string"},
+        "user_id": {"type": "integer"}
+    },
+    "required": ["user_id"]
+}
+
 LOGIN_SCHEMA = {
     "type": "object",
     "properties": {
