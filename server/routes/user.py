@@ -4,7 +4,7 @@ import traceback
 from flask import Blueprint, request, jsonify
 from jsonschema import validate
 from services import UserService
-from validation import REGISTER_SCHEMA, LOGIN_SCHEMA, RESET_PASSWORD_SCHEMA, ADMIN_CREATE_USER_SCHEMA
+from validation import REGISTER_SCHEMA, LOGIN_SCHEMA, RESET_PASSWORD_SCHEMA, ADMIN_CREATE_USER_SCHEMA, UPDATE_USER_SCHEMA
 user = Blueprint("user", __name__)
 logger = logging.getLogger("user")
 # logger.info('Login page accessed')
@@ -47,6 +47,19 @@ def create_user():
             return jsonify(response)
         else:
             return jsonify({"errror": "Invalid Admin"}), 401
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+@user.route("/update_user", methods=["POST"])
+def update_user():
+    try:
+        data = request.get_json()
+        validate(data, UPDATE_USER_SCHEMA)
+        user_id = data["user_id"]
+        data.pop("user_id", None)
+        response = user_service_obj.update_user(user_id, data)
+        return jsonify(response)
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500

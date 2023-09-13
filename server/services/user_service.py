@@ -2,7 +2,7 @@ import traceback
 from flask_jwt_extended import create_access_token
 
 from models import User, Role, Quiz, Result
-from utils import encrypt, decrypt, obj_to_list
+from utils import encrypt, decrypt, obj_to_list, obj_to_dict
 from database import session
 from sqlalchemy import desc
 
@@ -36,6 +36,19 @@ class UserService:
             session.rollback()
             traceback.print_exc()
             return {"message": str(e), "status": False}
+    
+    
+    def update_user(self, user_id, update_data):
+        user = session.query(User).get(user_id)
+        if user:
+            for key, value in update_data.items():
+                if key == "password":
+                    value = encrypt(value)
+                    key = "hashed_password"
+                setattr(user, key, value)  
+            session.commit()
+        user_dic = obj_to_dict(user)
+        return user_dic
     
     def deactivate_user(self, user_id):
         try:
