@@ -8,6 +8,7 @@ import LessonIndex from "./screens/Quiz/LessonIndex";
 import GLOBAL_CONSTANTS from "../GlobalConstants";
 import LessonView from "./screens/Quiz/LessonView";
 import QuizListing from "./screens/QuizListing";
+import DashboardRedirection from "./screens/statistics/DashboardRedirection";
 
 function Url_Routes() {
    
@@ -22,14 +23,14 @@ function Url_Routes() {
           {
             GLOBAL_CONSTANTS?.user_cred?.role_id == 1 ? <>
           <Route excat path="/" element={<HeaderFooterLayout Component={<Dashboard />} /> } />
-          <Route excat path="/dashboard" element={<HeaderFooterLayout Component={<Dashboard />} /> } />
+          <Route excat path="/dashboard" element={<HeaderFooterLayout Component={<DashboardRedirection />} /> } />
           <Route excat path="/quiz" element={<HeaderFooterLayout Component={<QuizListing />} /> } />
           <Route excat path="/users" element={<HeaderFooterLayout Component={<Users />} /> } />
           <Route excat path="/profile" element={<HeaderFooterLayout Component={<Profile/>} /> } />
               
             </>:<>
             <Route excat path="/" element={<HeaderFooterLayout Component={<Dashboard />} /> } />
-          <Route excat path="/dashboard" element={<HeaderFooterLayout Component={<Dashboard />} /> } />
+          <Route excat path="/dashboard" element={<HeaderFooterLayout Component={<DashboardRedirection />} /> } />
           <Route excat path="/lessons" element={<HeaderFooterLayout Component={<LessonIndex/>} /> } />
           <Route excat path="/lesson/:id" element={<HeaderFooterLayout Component={<LessonView/>} /> } />
           <Route excat path="/profile" element={<HeaderFooterLayout Component={<Profile/>} /> } />

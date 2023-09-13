@@ -201,3 +201,188 @@ export const user_login = (data, callback) => {
         });
     };
   };
+
+  const getUserList = (data) => ({
+    type: types.USERS_LIST,
+    payload: data,
+  });
+  
+  export const loadUserList = () => {
+    return function (dispatch) {
+      var headers = {
+        "Content-type": "application/json",
+        };
+        axios.get(`${GLOBAL_CONSTANTS?.backend_url}/auth/user_list`, {headers})
+        .then((resp) => {
+          dispatch(getUserList(resp?.data));
+        })
+        .catch((error) => console.log(error));
+    };
+  };
+
+
+  export const activateUser = (id , callback) => {
+    return function () {
+      var headers = {
+        "Content-type": "application/json",
+      };
+      const note = toast.loading("Activating User ..")
+      axios
+        .get(`${GLOBAL_CONSTANTS.backend_url}auth/${id}/activate`, {
+          headers,
+        })
+        .then((resp) => {
+          callback(resp?.data);
+          toast.update(note,{render:"User Activated",type:"success",isLoading:false,autoClose:2000});
+
+        })
+        .catch((error) => {
+          toast.update(note,{render:"Something went wrong",type:"success",isLoading:false,autoClose:3000});
+
+        });
+    };
+  };
+
+  export const deactivateUser = (id , callback) => {
+    return function () {
+      var headers = {
+        "Content-type": "application/json",
+      };
+      const note = toast.loading("Deactivating User ..")
+
+      axios
+        .get(`${GLOBAL_CONSTANTS.backend_url}auth/${id}/deactivate`, {
+          headers,
+        })
+        .then((resp) => {
+          callback(resp?.data);
+          toast.update(note,{render:"User Deactivated",type:"success",isLoading:false,autoClose:2000,});
+
+        })
+        .catch((error) => {
+          toast.update(note,{render:"Something went wrong",type:"success",isLoading:false,autoClose:3000});
+        });
+    };
+  };
+
+
+  export const activateQuiz = (id , callback) => {
+    return function () {
+      var headers = {
+        "Content-type": "application/json",
+      };
+      const note = toast.loading("Activating Quiz ..")
+      axios
+        .get(`${GLOBAL_CONSTANTS.backend_url}quiz/${id}/activate`, {
+          headers,
+        })
+        .then((resp) => {
+          callback(resp?.data);
+          toast.update(note,{render:"Quiz Activated",type:"success",isLoading:false,autoClose:2000});
+
+        })
+        .catch((error) => {
+          toast.update(note,{render:"Something went wrong",type:"success",isLoading:false,autoClose:3000});
+
+        });
+    };
+  };
+
+  export const deactivateQuiz = (id , callback) => {
+    return function () {
+      var headers = {
+        "Content-type": "application/json",
+      };
+      const note = toast.loading("Deactivating Quiz ..")
+
+      axios
+        .get(`${GLOBAL_CONSTANTS.backend_url}quiz/${id}/deactivate`, {
+          headers,
+        })
+        .then((resp) => {
+          callback(resp?.data);
+          toast.update(note,{render:"Quiz Deactivated",type:"success",isLoading:false,autoClose:2000,});
+
+        })
+        .catch((error) => {
+          toast.update(note,{render:"Something went wrong",type:"success",isLoading:false,autoClose:3000});
+        });
+    };
+  };
+
+  export const deleteQuiz = (id , callback) => {
+    return function () {
+      var headers = {
+        "Content-type": "application/json",
+      };
+      const note = toast.loading("Deactivating Quiz ..")
+
+      axios
+        .get(`${GLOBAL_CONSTANTS.backend_url}quiz/${id}/delete_quiz`, {
+          headers,
+        })
+        .then((resp) => {
+          callback(resp?.data);
+          toast.update(note,{render:"Quiz deleted",type:"success",isLoading:false,autoClose:2000,});
+
+        })
+        .catch((error) => {
+          toast.update(note,{render:"Something went wrong",type:"success",isLoading:false,autoClose:3000});
+        });
+    };
+  };
+
+
+  export const downloadQuiz = (id , callback) => {
+    return function () {
+      var headers = {
+        "Content-type": "application/json",
+      };
+      axios
+        .get(`${GLOBAL_CONSTANTS.backend_url}quiz/${id}/download_quiz`, {
+          headers,
+        })
+        .then((resp) => {
+          callback(resp?.data);
+        })
+        .catch((error) => {
+         
+        });
+    };
+  };
+
+  const getUserStats = (data) => ({
+    type: types.USER_STATS,
+    payload: data,
+  });
+  
+  export const loadUserStats = () => {
+    return function (dispatch) {
+      var headers = {
+        "Content-type": "application/json",
+        };
+        axios.get(`${GLOBAL_CONSTANTS?.backend_url}/auth/${GLOBAL_CONSTANTS?.user_cred?.user_id}/statistics`, {headers})
+        .then((resp) => {
+          dispatch(getUserStats(resp?.data?.data));
+        })
+        .catch((error) => console.log(error));
+    };
+  };
+
+  const getAdminStats = (data) => ({
+    type: types.ADMIN_STATS,
+    payload: data,
+  });
+  
+  export const loadAdminStats = () => {
+    return function (dispatch) {
+      var headers = {
+        "Content-type": "application/json",
+        };
+        axios.get(`${GLOBAL_CONSTANTS?.backend_url}/auth/admin_statistics`, {headers})
+        .then((resp) => {
+          dispatch(getAdminStats(resp?.data?.data));
+        })
+        .catch((error) => console.log(error));
+    };
+  };

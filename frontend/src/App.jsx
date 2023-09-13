@@ -14,9 +14,7 @@ export default function App() {
       <Url_Routes />
       <ToastContainer
         transition={Slide}
-        autoClose={2000}
-        hideProgressBar
-        closeOnClick
+        autoClose={200}
       />
     </Provider>
   );

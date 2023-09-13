@@ -12,8 +12,10 @@ import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import { EmailOutlined } from "@mui/icons-material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 export default function Login() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [loginData, setLoginData] = useState({});
 
   const onLogingChange = (key, value) => {
@@ -29,6 +31,7 @@ export default function Login() {
       password: loginData?.password,
     };
     dispatch(user_login(payload, () => {
+      navigate("/dashboard");
       window.location.reload()
     }));
   };

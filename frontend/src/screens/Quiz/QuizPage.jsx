@@ -26,6 +26,8 @@ export default function QuizPage({ id,setValue }) {
 
   const [results,setResults] = useState(null);
   const [totalScore,settotalScore]=useState(null);
+  const [totalMarks,setTotalMarks]=useState(null);
+
 
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [activeQuestion, setActiveQuestion] = useState({});
@@ -66,6 +68,7 @@ export default function QuizPage({ id,setValue }) {
     console.info(resp,"results")
         setResults(()=>resp?.is_qualified);
         settotalScore(()=>resp?.score)
+        setTotalMarks(()=>resp?.total_marks)
         // setTimeout(()=>{
         //     handleChangeClose();
         // },3000)
@@ -104,7 +107,7 @@ export default function QuizPage({ id,setValue }) {
 
   return (
     viewresults? <>
-    <QuizResults questions={questions} pass={results} total_score={totalScore}/>
+    <QuizResults questions={questions} pass={results} total_score={totalScore} total_marks={totalMarks}/>
     </>:
     <>
       <div className=" w-full flex flex-col gap-4 ">

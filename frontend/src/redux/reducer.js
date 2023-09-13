@@ -8,6 +8,9 @@ const initialState = {
   quizView:{},
   lessonsList:[],
   lessonView:{},
+  usersList:[],
+  userStats:{},
+  adminStats:{}
 };
 
 const DataReducers = (state = initialState, action) => {
@@ -44,6 +47,27 @@ const DataReducers = (state = initialState, action) => {
             quizView:action?.payload
           }
         }
+        case types.USERS_LIST :
+        {
+          return {
+            ...state,
+            usersList:action?.payload
+          }
+        }
+        case types.USER_STATS :
+          {
+            return {
+              ...state,
+              userStats:action?.payload
+            }
+          }
+          case types.ADMIN_STATS :
+          {
+            return {
+              ...state,
+              adminStats:action?.payload
+            }
+          }
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,10 +6,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Autocomplete, Box, Button, InputAdornment, Modal, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, InputAdornment, Modal, Switch, TextField } from '@mui/material';
 import ClearSharpIcon from "@mui/icons-material/ClearSharp";
-import { user_signup } from '../redux/action';
-import { useDispatch } from 'react-redux';
+import { activateUser, deactivateUser, loadUserList, user_signup } from '../redux/action';
+import { useDispatch, useSelector } from 'react-redux';
 import PasswordIcon from "@mui/icons-material/Password";
 
 import AlternateEmailOutlinedIcon from "@mui/icons-material/AlternateEmailOutlined";
@@ -31,8 +31,8 @@ const rows = [
 
 export default function Users() {
   const dispatch = useDispatch();
+  const {usersList} = useSelector((state)=>state?.data)
   const [open,setOpen] = useState(false);
-
   const [loginData, setLoginData] = useState({});
 
   const onLogingChange = (key, value) => {
@@ -50,7 +50,19 @@ export default function Users() {
       institution:loginData?.institution,
       role:loginData?.role?.label
     };
-    dispatch(user_signup(payload, () => {}));
+    dispatch(user_signup(payload, () => { dispatch(loadUserList());setOpen(false)}));
+  };
+
+  useEffect(()=>{
+    dispatch(loadUserList())
+  },[])
+
+  const handleChange = (id,value) => {
+    if(value)
+    dispatch(activateUser(id,()=>{dispatch(loadUserList())}));
+    else
+    dispatch(deactivateUser(id,()=>{dispatch(loadUserList())}));
+
   };
 
   return (
@@ -67,20 +79,29 @@ export default function Users() {
             <TableCell align="">Email</TableCell>
             <TableCell align="">Institution</TableCell>
             <TableCell align="">Role</TableCell>
+            <TableCell align="">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {usersList.map((row) => (
             <TableRow
-              key={row.name}
+              key={row?.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                {row?.username}
               </TableCell>
-              <TableCell align="">{row.calories}</TableCell>
-              <TableCell align="">{row.fat}</TableCell>
-              <TableCell align="">{row.carbs}</TableCell>
+              <TableCell align="">{row?.email}</TableCell>
+              <TableCell align="">{row?.institution}</TableCell>
+              <TableCell align="">{row?.role_id === 1 ? "Admin" : row?.role_id === 2 ? "Teacher" : "Student"}</TableCell>
+              <TableCell align="">
+                <Switch
+                  color='secondary'
+                  checked={row?.is_active}
+                  onChange={(e)=>handleChange(row?.id,e.target.checked)}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
