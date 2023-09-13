@@ -12,7 +12,7 @@ import {
   activateQuiz,
   deactivateQuiz,
   deleteQuiz,
-  downloadQuiz,
+  // downloadQuiz,
   loadQuizList,
   quizCreate,
 } from "../redux/action";
@@ -20,18 +20,6 @@ import { useDispatch, useSelector } from "react-redux";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import GLOBAL_CONSTANTS from "../../GlobalConstants";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 50, 100),
-  createData("Ice cream sandwich", 237, 9.0, 50, 100),
-  createData("Eclair", 262, 16.0, 50, 100),
-  createData("Cupcake", 305, 3.7, 50, 100),
-  createData("Gingerbread", 356, 16.0, 50, 100),
-];
 
 export default function QuizListing() {
   const dispatch = useDispatch();
@@ -55,14 +43,6 @@ export default function QuizListing() {
     );
   };
 
-  // const downloadQuiz=()=>{
-  //   console.log("downloadQuiz");
-  // }
-
-  const handleRowSelection = () => {
-    console.log("testrowselect");
-  };
-
   useEffect(() => {
     dispatch(loadQuizList());
   }, []);
@@ -72,28 +52,7 @@ export default function QuizListing() {
   }, [quizList]);
   //   #region image upload
 
-  // useEffect(() => {
-  //   if (profileImage?.length) {
-  //     // console.log("files", files);
-  //     for (let index = 0; index < profileImage?.length; index++) {
-  //       let reader = new FileReader();
-  //       reader.readAsDataURL(profileImage[index]);
-  //       reader.onload = (e) => {
-  //         // console.log("file", e.target.result);
-  //         const payload = {
-  //           data: e.target.result.split(",")[1]
-  //         };
-  //         // console.log(payload, "payload");
-  //         // dispatch(
-  //         //   getCSVLink(payload, (resp) => {
-  //         //     setProfileLink(() => resp?.data?.link);
-  //         //   })
-  //         // );
-  //       };
-  //     }
-  //   }
-  // }, [profileImage]);
-  const handleChange = (id, value) => {
+ const handleChange = (id, value) => {
     if (value)
       dispatch(
         activateQuiz(id, () => {
@@ -108,19 +67,6 @@ export default function QuizListing() {
       );
   };
 
-  const downloadExcel = (binaryData) => {
-    const blob = new Blob([binaryData], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
-    });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "example.xlsx";
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-  }
 
   return (
     <div className="grid gap-4 p-4">
@@ -193,7 +139,7 @@ export default function QuizListing() {
                       onChange={(e) => handleChange(row?.id, e.target.checked)}
                       inputProps={{ "aria-label": "controlled" }}
                     />
-                    <DeleteIcon
+                    {/* <DeleteIcon
                       color="error"
                       style={{ cursor: "pointer" }}
                       onClick={() => {
@@ -203,7 +149,7 @@ export default function QuizListing() {
                           })
                         );
                       }}
-                    />
+                    /> */}
                   </TableCell>
                 </TableRow>
               ))}
@@ -269,15 +215,19 @@ export default function QuizListing() {
                 <div className="grid grid-cols-2 justify-center items-center w-full h-full gap-2   ">
                   <div className="flex flex-col justify-center items-center text-md gap-y-4 text-white font-medium bg-gray-400 rounded p-4 border-2 border-dashed border-gray-200">
                     Download Sample CSV file from here
+                    <a href={`${GLOBAL_CONSTANTS?.backend_url}quiz/${quizList?.find(()=>true)?.id}/download_quiz`} >
                     <Button
                       endIcon={<CloudDownloadIcon />}
                       style={{ color: "white", borderColor: "white" }}
                       variant="outlined"
                       size="small"
+                      onClick={() => {    
+                      }}
                     >
                       {" "}
                       Download{" "}
                     </Button>
+                    </a>
                   </div>
 
                   <div className="flex flex-col justify-center items-center text-md gap-y-4 text-white font-medium  bg-purple-600 rounded p-4 border-2 border-dashed border-purple-300 ">
@@ -384,22 +334,19 @@ export default function QuizListing() {
                 <div className="grid grid-cols-2 justify-center items-center w-full h-full gap-2   ">
                   <div className="flex flex-col justify-center items-center text-md gap-y-4 text-white font-medium bg-gray-400 rounded p-4 border-2 border-dashed border-gray-200">
                     Download Sample CSV file from here
+                    <a href={`${GLOBAL_CONSTANTS?.backend_url}quiz/${selectedRow}/download_quiz`} >
                     <Button
                       endIcon={<CloudDownloadIcon />}
                       style={{ color: "white", borderColor: "white" }}
                       variant="outlined"
                       size="small"
-                      onClick={() => {
-                        dispatch(
-                          downloadQuiz(selectedRow, (resp) => {
-                            downloadExcel(resp); // The provided binary data
-                          })
-                        );
+                      onClick={() => {    
                       }}
                     >
                       {" "}
                       Download{" "}
                     </Button>
+                    </a>
                   </div>
 
                   <div className="flex flex-col justify-center items-center text-md gap-y-4 text-white font-medium  bg-purple-600 rounded p-4 border-2 border-dashed border-purple-300 ">

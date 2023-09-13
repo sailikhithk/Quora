@@ -386,3 +386,35 @@ export const user_login = (data, callback) => {
         .catch((error) => console.log(error));
     };
   };
+
+  export const user_update = (data, callback) => {
+    return function () {
+      var headers = {
+        "Content-type": "application/json",
+      };
+      axios
+        .post(`${GLOBAL_CONSTANTS.backend_url}auth/update_user`, JSON.stringify(data), {
+          headers,
+        })
+        .then((resp) => {
+          if(resp?.data?.error)
+          {
+            toast.error(resp?.data?.error);  
+          }
+          else
+          {
+            toast.success("Updated Sucessfully");  
+
+          }
+          callback(resp?.data);
+        })
+        .catch((error) => {
+          toast.error(
+            error ?? "Something went wrong",
+            {
+              autoClose: 2000,
+            }
+          );
+        });
+    };
+  };

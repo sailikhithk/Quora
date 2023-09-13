@@ -113,4 +113,4 @@ if __name__ == "__main__":
 
     Base.metadata.create_all(engine)
     # Starting Flask development server
-    app.run(host="0.0.0.0", debug=True, port=5001)
+    app.run(host="0.0.0.0", debug=True, port=5000)
