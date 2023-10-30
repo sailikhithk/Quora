@@ -118,6 +118,12 @@ export default function HeaderFooterLayout({ Component }) {
             route: "/profile",
             icon: <SettingsOutlinedIcon style={{ color: "white" }} />,
           },
+
+          {
+            label: "Create Lessons",
+            route: "/createLessons",
+            icon: <SettingsOutlinedIcon style={{ color: "white" }} />,
+          },
         ]
       );
     } else {
